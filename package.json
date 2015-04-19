@@ -1,6 +1,6 @@
 {
   "name"        : "yocto-logger",
-  "description" : "Logger utility for yocto core stack based on winston/loadash/chalk/moment/string-format",
+  "description" : "Logger utility for yocto core stack based on winston",
   "version"     : "0.1.1",
   "private"     : true,
   "scripts"     : {},

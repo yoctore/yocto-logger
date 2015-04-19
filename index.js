@@ -132,7 +132,7 @@ function Logger() {
     // build data to log
     var dataToLog = {
       level    : options.level,
-      date     : _.isFunction(options.timestamp) ? options.timestamp() : moment().format(),
+      date     : _.isFunction(options.timestamp) ? options.timestamp() : (_.isNull(options.timestamp) ? null : moment().format()),
       message  : (!_.isUndefined(options.message) && !_.isEmpty(options.message) ? options.message : ''),
       meta     : (!_.isUndefined(options.meta) && Object.keys(options.meta).length ? JSON.stringify(options.meta) : '')
     };
@@ -156,7 +156,12 @@ function Logger() {
     }
 
     // default format    
-    var dformat  = '[{date}] {level} :';
+    var dformat  = '{level} :';
+    
+    if (!_.isNull(dataToLog.date)) {
+      dformat = [ '[{date}]', dformat ].join(' ');
+    }
+    
     
     // check if we have message
     if (!_.isUndefined(dataToLog.message) && !_.isEmpty(dataToLog.message)) {
@@ -235,7 +240,7 @@ function Logger() {
     }
 
     // return default value
-    return "white";
+    return 'white';
   }
 
   /**
@@ -274,7 +279,7 @@ function Logger() {
     silent            : false,
     label             : labelFormatter,
     formatter         : this.consoleTransportFormatter,
-    timestamp         : timestampFormatter,
+    timestamp         : null,
     colorize          : colorizeFormatter
   };
 
@@ -285,6 +290,7 @@ function Logger() {
    * @type Object 
    */
   this.defaultDailyRotateTransportFile = {
+    name              : 'default-daily-rotate-transport',
     level             : 'verbose',
     dirname           : './',
     filename          : uuid.v4(),
@@ -316,17 +322,22 @@ function Logger() {
  * 
  * @method addTransport
  * @param {String} path to use
- * @param {String) filename to use
+ * @param {String} filename to use
+ * @param {Object} Override options on daily rotate
  */
-Logger.prototype.addDailyRotateTransport = function(fullpath, filename) {
-
-  if (!_.isUndefined(fullpath)) {
-    
+Logger.prototype.addDailyRotateTransport = function(fullpath, filename, options) {
+  
+  // path is valid type ? transform to default value if not
+  if (_.isUndefined(fullpath) || !_.isString(fullpath) || _.isNull(fullpath)) {
+    fullpath = './';   
+    this.warning('[ Add New Daily Rotate Transport ] - Invalid path given. Using default path "./"');
   }
+  
   // normalize path
   fullpath = path.normalize(fullpath);
   fullpath = path.resolve(fullpath);
   
+  // save current context
   var context = this;
   
   // check file 
@@ -334,14 +345,14 @@ Logger.prototype.addDailyRotateTransport = function(fullpath, filename) {
 
     // is directory ?    
     if (!stats || !stats.isDirectory()) {
-      context.error('Directory path is invalid for new daily rotate. operation aborted !');
+      context.error([ '[ Add New Daily Rotate Transport ] - Directory path : [', fullpath, '] is invalid. Operation aborted !' ].join(' '));
     } else {
       // check permission
       fs.access(fullpath, fs.F_OK | fs.R_OK | fs.W_OK, function(err) {
 
         // can read / write ??? 
         if (err) {
-                    
+          context.error([ '[ Add New Daily Rotate Transport ] - Cannot read and write on', fullpath, ' - operation aborted !' ].join(' '));     
         } else {
           // build object configuration
           var daily = _.clone(context.defaultDailyRotateTransportFile);
@@ -349,22 +360,40 @@ Logger.prototype.addDailyRotateTransport = function(fullpath, filename) {
           // extend daily
           _.extend(daily, { dirname : fullpath });
           
-          // check isf file is specified
-          if (!_.isUndefined(filename) && !_.isEmpty(filename) && !_.isNull(fileName)) {
+          // is a valid options ?
+          if (!_.isUndefined(options) && !_.isNull(options) && _.isObject(options)) {
+            _.extend(daily, options);
+          }
+          
+          // check if file is specified
+          if (!_.isUndefined(filename) && !_.isEmpty(filename) && !_.isNull(filename)) {
             
-            if (_.isString(filename)) {
+            // is a valid file name 
+            if (_.isString(filename) && !_.isEmpty(filename)) {
               _.extend(daily, { filename : filename });              
             } else {
-              //context.warning(__function)
+              context.warning([ '[ Add New Daily Rotate Transport ] - filename is not a string. retore filename to ', daily.filename ].join(' '));
             }
           }
 
           // winston is available ?? 
           if (!_.isUndefined(context.winston)) {
+            // transport already exists ?
+            if (_.has(context.winston.transports, daily.name)) {              
+              context.warning([ '[ Add New Daily Rotate Transport ] - A transport with the name', daily.name, 'already exists. Removing current before adding new transport' ].join(' '));
+              context.winston.remove(daily.name);
+            }
+            
+            // add new
             context.winston.add(winston.transports.DailyRotateFile, daily);
-            context.info(['Adding new daily rotate file success. Datas are log on', [ fullpath, filename ].join('/') ].join(' '));
+            
+            // build name for logging message
+            filename = [ fullpath, daily.filename, moment().format(daily.datePattern.replace('.log', '').toUpperCase()), '.log' ].join('');
+            // log            
+            context.info([ '[ Add New Daily Rotate Transport ] - Success ! Datas are logged in', filename ].join(' '));
+
           } else {
-            console.log(chalk.red('Cannot add daily rotate transport on winston. instance is invalid'));
+            console.log(chalk.red('[ Add New Daily Rotate Transport ] - Cannot add new transport. instance is invalid'));
           }
         }
       });
@@ -406,10 +435,14 @@ Logger.prototype.process = function(level, message, meta) {
     if (_.isNumber(ref)) {
       if (level <= ref) {
         if (value.level == level) {
-          if (!_.isUndefined(meta)) {
-            this.winston.log(value.f, message, meta);                
+          if (!_.isUndefined(this.winston) && !_.isNull(this.winston) && _) {
+            if (!_.isUndefined(meta)) {
+              this.winston.log(value.f, message, meta);                
+            } else {
+              this.winston.log(value.f, message);              
+            }            
           } else {
-            this.winston.log(value.f, message);              
+            console.log(chalk.red('[ Logger.process ] - Cannot une winston logger. instance is undefined or null'));
           }
         }
       }
@@ -425,9 +458,9 @@ Logger.prototype.process = function(level, message, meta) {
  * @param {Object} metadata to send on logger
  */
 Logger.prototype.verbose = function(message, meta) {
+  // call main log process with verbose level
   this.process(this.VERBOSE_LOG_LEVEL.level, message, meta);
 }
-
 
 /**
  * Log message and metadata with the current info level
@@ -437,6 +470,7 @@ Logger.prototype.verbose = function(message, meta) {
  * @param {Object} metadata to send on logger
  */
 Logger.prototype.info = function(message, meta) {
+  // call main log process with info level
   this.process(this.INFO_LOG_LEVEL.level, message, meta);
 }
 
@@ -448,6 +482,7 @@ Logger.prototype.info = function(message, meta) {
  * @param {Object} metadata to send on logger
  */
 Logger.prototype.warning = function(message, meta) {
+  // call main log process with warning level
   this.process(this.WARNING_LOG_LEVEL.level, message, meta);
 }
 
@@ -459,6 +494,7 @@ Logger.prototype.warning = function(message, meta) {
  * @param {Object} metadata to send on logger
  */
 Logger.prototype.error = function(message, meta) {
+    // call main log process with error level
   this.process(this.ERROR_LOG_LEVEL.level, message, meta);
 }
 
@@ -470,47 +506,62 @@ Logger.prototype.error = function(message, meta) {
  * @param {Object} metadata to send on logger
  */
 Logger.prototype.debug = function(message, meta) {
+    // call main log process with debug level
   this.process(this.DEBUG_LOG_LEVEL.level, message, meta);
 }
 
-Logger.prototype.banner = function(message, leftDelimiter, topDelimiter, rightDelimiter, bottomDelimiter) {
-  // setting up tje default banner delimiter
-  leftDelimiter   = leftDelimiter     || '|';
-  topDelimiter    = topDelimiter      || '_';
-  rightDelimiter  = rightDelimiter    || '|';
-  bottomDelimiter = bottomDelimiter   || '';
-  
-  // interval vars
-  var header = [];
-  var footer = [];
+/**
+ * Log a banner message on console
+ *
+ * @method banner
+ * @param {String} message to send on logger
+ * @param {Object} cstyle style to use on banner based on chalk rules
+ *
+ * @example
+ * 
+ *      // eample with custom style
+ *      instance.banner('test message', { color : 'white', bgColor : 'bgRed' });
+ *      // This will display "test message" with bgRed and white text 
+ *  
+ */
+Logger.prototype.banner = function(message, cstyle) {
+  // default style
+  var style = {
+    color           : 'white',
+    bgColor         : 'bgBlack',
+    topDelimiter    : '-',
+    bottomDelimiter : '-',
+    leftDelimiter   : '|',
+    rightDelimiter  : '|'        
+  };
 
-  // a delta chars for alignement
-  var delta   = 3;  
+  // has custom style options with color and bgColor rules
+  if (!_.isUndefined(cstyle) && _.has(cstyle, 'color') && _.has(cstyle, 'bgColor')) {
 
-  // message limit
-  var limit   = message.length + delta;
+    // bg rules start by correct Prefix ?
+    if (!_.startsWith('bg', cstyle.bgColor)) {
+      cstyle.bgColor = [ 'bg', _.capitalize(cstyle.bgColor.toLowerCase()) ].join('');
+    }
 
-  // generate header and footer
-  for (var i = 0; i <= limit; i++) {
-    header.push(topDelimiter);
-    footer.push(bottomDelimiter);
+    // extend obj    
+    _.extend(style, cstyle);
   }
 
-  var limitMessage = 
+  // build end message
+  var endmessage  = [ style.leftDelimiter, message, style.rightDelimiter ].join(' '); 
 
-  message = [ leftDelimiter, message, rightDelimiter ];
-  
-  header  = header.join(topDelimiter);
-  message = message.join(' ');
-  footer  = footer.join(bottomDelimiter);
-
-  // display
-  //console.log(header);
-  //console.log(message);
-  //console.log(footer);
+  if (_.has(chalk.styles, style.color) && _.has(chalk.styles, style.bgColor)) {
+    // log full message
+    console.log(chalk[style.color][style.bgColor](_.repeat(style.topDelimiter, endmessage.length)));  
+    console.log(chalk[style.color][style.bgColor](endmessage));
+    console.log(chalk[style.color][style.bgColor](_.repeat(style.bottomDelimiter, endmessage.length)));      
+  } else {
+      this.warning('[ Logger.Banner ] - Cannot use custom style given style is invalid. please read chalk documentation. Logging with current shell config.');  
+      console.log(_.repeat(style.topDelimiter, endmessage.length));  
+      console.log(endmessage);
+      console.log(_.repeat(style.bottomDelimiter, endmessage.length));      
+  }
 }
-
-
 
 /**
  * Export current logger to use it on node
