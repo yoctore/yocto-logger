@@ -12,9 +12,6 @@
     "name"  : "ROBERT Mathieu",
     "email" : "mathieu@yocto.re"
   }],
-  "bin" : {
-    "yocto-logger" : "./bin/yocto-logger"
-  },
   "main" : "dist/index.js",
   "repository" : {
     "type" : "git",
