@@ -1,0 +1,447 @@
+{
+    "project": {
+        "name": "yocto-logger",
+        "description": "Logger utility for yocto core stack based on winston",
+        "version": "0.1.1",
+        "url": "http://yocto.re"
+    },
+    "files": {
+        "src/index.js": {
+            "name": "src/index.js",
+            "modules": {},
+            "classes": {
+                "logger": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {},
+    "classes": {
+        "logger": {
+            "name": "logger",
+            "shortname": "logger",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src/index.js",
+            "line": 49,
+            "description": "Custom logger manager\nManage your own logger request"
+        }
+    },
+    "classitems": [
+        {
+            "file": "src/index.js",
+            "line": 2,
+            "description": "Yocto logger.\n\nA custom logger wrapper based on winston for nodejs\n\nFor more details on these dependencies read links below :\n - Winston : https://github.com/flatiron/winston\n - LodAsh :\n - Chalk : \n - momentjs : \n - string-format : https://www.npmjs.com/package/string-format\n - uuid :\n - fs :\n - path :\n\nBy default a console is configured with default options (cf winston documentation for more details)\nPossibility to use the logger with these levels :\n - error\n - warning\n - info\n - debug\n - verbose\n\nA Banner function is available to display on console.log a more significant message.\n\nFor each examples, please read file on example directory.",
+            "date": ": 21/04/2015",
+            "author": ":  Mathieu ROBERT <mathieu@yocto.re>",
+            "copyright": ": Yocto SAS, All right reserved",
+            "class": "logger"
+        },
+        {
+            "file": "src/index.js",
+            "line": 57,
+            "description": "Default log level",
+            "itemtype": "property",
+            "name": "logLevel",
+            "type": "Integer",
+            "default": "5",
+            "class": "logger"
+        },
+        {
+            "file": "src/index.js",
+            "line": 65,
+            "description": "Default const to define console type\nsee : https://www.npmjs.com/package/winston#console-transport",
+            "itemtype": "property",
+            "name": "TYPE_CONSOLE",
+            "type": "String",
+            "default": "console",
+            "class": "logger"
+        },
+        {
+            "file": "src/index.js",
+            "line": 75,
+            "description": "Default const to define daily rotate file \nsee : https://www.npmjs.com/package/winston#daily-rotate-file-transport",
+            "itemtype": "property",
+            "name": "TYPE_DAILY_ROTATE_FILE",
+            "type": "String",
+            "default": "console",
+            "class": "logger"
+        },
+        {
+            "file": "src/index.js",
+            "line": 85,
+            "description": "Default const to define error log level rules on current class",
+            "itemtype": "property",
+            "name": "ERROR_LOG_LEVEL",
+            "type": "Object",
+            "class": "logger"
+        },
+        {
+            "file": "src/index.js",
+            "line": 93,
+            "description": "Default const to define warning log level rules on current class",
+            "itemtype": "property",
+            "name": "WARNING_LOG_LEVEL",
+            "type": "Object",
+            "class": "logger"
+        },
+        {
+            "file": "src/index.js",
+            "line": 101,
+            "description": "Default const to define info log level rules on current class",
+            "itemtype": "property",
+            "name": "INFO_LOG_LEVEL",
+            "type": "Object",
+            "class": "logger"
+        },
+        {
+            "file": "src/index.js",
+            "line": 109,
+            "description": "Default const to define debug log level rules on current class",
+            "itemtype": "property",
+            "name": "DEBUG_LOG_LEVEL",
+            "type": "Object",
+            "class": "logger"
+        },
+        {
+            "file": "src/index.js",
+            "line": 117,
+            "description": "Default const to define verbose log level rules on current class",
+            "itemtype": "property",
+            "name": "VERBOSE_LOG_LEVEL",
+            "type": "Object",
+            "class": "logger"
+        },
+        {
+            "file": "src/index.js",
+            "line": 126,
+            "description": "Default formatter. use all data to render the correct message format to the logger formatter",
+            "itemtype": "method",
+            "name": "formatter",
+            "params": [
+                {
+                    "name": "default",
+                    "description": "options to use",
+                    "type": "Object"
+                },
+                {
+                    "name": "if",
+                    "description": "truen enable colorize process, false otherwise",
+                    "type": "Boolean"
+                }
+            ],
+            "return": {
+                "description": "the correct string to use on current transporter",
+                "type": "String"
+            },
+            "class": "logger"
+        },
+        {
+            "file": "src/index.js",
+            "line": 186,
+            "description": "Default function to get a current date format",
+            "itemtype": "method",
+            "name": "timestamp",
+            "return": {
+                "description": "formated string based on moment.js format",
+                "type": "String"
+            },
+            "class": "logger"
+        },
+        {
+            "file": "src/index.js",
+            "line": 196,
+            "description": "Default label function to retrive the correct label to display on logger",
+            "itemtype": "method",
+            "name": "labelFormatter",
+            "params": [
+                {
+                    "name": "value",
+                    "description": "to check",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "the correct value to display",
+                "type": "String"
+            },
+            "class": "logger"
+        },
+        {
+            "file": "src/index.js",
+            "line": 224,
+            "description": "Default function to colorize the log level with chalk",
+            "itemtype": "method",
+            "name": "colorize",
+            "params": [
+                {
+                    "name": "(String)",
+                    "description": "current level to use"
+                }
+            ],
+            "return": {
+                "description": "(String) current color to use on chalk"
+            },
+            "class": "logger"
+        },
+        {
+            "file": "src/index.js",
+            "line": 252,
+            "description": "Default console formatter. use all data to render the correct message format to the logger formatter",
+            "itemtype": "method",
+            "name": "formatter",
+            "params": [
+                {
+                    "name": "default",
+                    "description": "options to use",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "the correct string to use on current transporter",
+                "type": "String"
+            },
+            "class": "logger"
+        },
+        {
+            "file": "src/index.js",
+            "line": 263,
+            "description": "Default daily rotate file formatter. use all data to render the correct message format to the logger formatter",
+            "itemtype": "method",
+            "name": "formatter",
+            "params": [
+                {
+                    "name": "default",
+                    "description": "options to use",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "the correct string to use on current transporter",
+                "type": "String"
+            },
+            "class": "logger"
+        },
+        {
+            "file": "src/index.js",
+            "line": 274,
+            "description": "Default console transport",
+            "itemtype": "property",
+            "name": "defaultConsoleTransport",
+            "type": "Object",
+            "class": "logger"
+        },
+        {
+            "file": "src/index.js",
+            "line": 292,
+            "description": "Default daily rotate transport file",
+            "itemtype": "property",
+            "name": "defaultDailyRotateTransportFile",
+            "type": "Object",
+            "class": "logger"
+        },
+        {
+            "file": "src/index.js",
+            "line": 314,
+            "description": "Default winston instance logger",
+            "itemtype": "property",
+            "name": "winston",
+            "type": "Object",
+            "class": "logger"
+        },
+        {
+            "file": "src/index.js",
+            "line": 326,
+            "description": "Adding transport on logger module",
+            "itemtype": "method",
+            "name": "addTransport",
+            "params": [
+                {
+                    "name": "path",
+                    "description": "to use",
+                    "type": "String"
+                },
+                {
+                    "name": "filename",
+                    "description": "to use",
+                    "type": "String"
+                },
+                {
+                    "name": "Override",
+                    "description": "options on daily rotate",
+                    "type": "Object"
+                }
+            ],
+            "class": "logger"
+        },
+        {
+            "file": "src/index.js",
+            "line": 410,
+            "description": "Default process function, get the current level and log our own message and metdata",
+            "itemtype": "method",
+            "name": "process",
+            "params": [
+                {
+                    "name": "(Integer),",
+                    "description": "level, the current log level"
+                },
+                {
+                    "name": "(Mixed),",
+                    "description": "messsagen the current message to display"
+                }
+            ],
+            "class": "logger"
+        },
+        {
+            "file": "src/index.js",
+            "line": 459,
+            "description": "Log message and metadata with the current verbose level",
+            "itemtype": "method",
+            "name": "verbose",
+            "params": [
+                {
+                    "name": "message",
+                    "description": "to send on logger",
+                    "type": "String"
+                },
+                {
+                    "name": "metadata",
+                    "description": "to send on logger",
+                    "type": "Object"
+                }
+            ],
+            "class": "logger"
+        },
+        {
+            "file": "src/index.js",
+            "line": 471,
+            "description": "Log message and metadata with the current info level",
+            "itemtype": "method",
+            "name": "verbose",
+            "params": [
+                {
+                    "name": "message",
+                    "description": "to send on logger",
+                    "type": "String"
+                },
+                {
+                    "name": "metadata",
+                    "description": "to send on logger",
+                    "type": "Object"
+                }
+            ],
+            "class": "logger"
+        },
+        {
+            "file": "src/index.js",
+            "line": 483,
+            "description": "Log message and metadata with the current warning level",
+            "itemtype": "method",
+            "name": "verbose",
+            "params": [
+                {
+                    "name": "message",
+                    "description": "to send on logger",
+                    "type": "String"
+                },
+                {
+                    "name": "metadata",
+                    "description": "to send on logger",
+                    "type": "Object"
+                }
+            ],
+            "class": "logger"
+        },
+        {
+            "file": "src/index.js",
+            "line": 495,
+            "description": "Log message and metadata with the current error level",
+            "itemtype": "method",
+            "name": "verbose",
+            "params": [
+                {
+                    "name": "message",
+                    "description": "to send on logger",
+                    "type": "String"
+                },
+                {
+                    "name": "metadata",
+                    "description": "to send on logger",
+                    "type": "Object"
+                }
+            ],
+            "class": "logger"
+        },
+        {
+            "file": "src/index.js",
+            "line": 507,
+            "description": "Log message and metadata with the current debug level",
+            "itemtype": "method",
+            "name": "verbose",
+            "params": [
+                {
+                    "name": "message",
+                    "description": "to send on logger",
+                    "type": "String"
+                },
+                {
+                    "name": "metadata",
+                    "description": "to send on logger",
+                    "type": "Object"
+                }
+            ],
+            "class": "logger"
+        },
+        {
+            "file": "src/index.js",
+            "line": 519,
+            "description": "Log a banner message on console",
+            "itemtype": "method",
+            "name": "banner",
+            "params": [
+                {
+                    "name": "message",
+                    "description": "to send on logger",
+                    "type": "String"
+                },
+                {
+                    "name": "cstyle",
+                    "description": "style to use on banner based on chalk rules",
+                    "type": "Object"
+                }
+            ],
+            "example": [
+                "\n\n     // eample with custom style\n     instance.banner('test message', { color : 'white', bgColor : 'bgRed' });\n     // This will display \"test message\" with bgRed and white text \n "
+            ],
+            "class": "logger"
+        },
+        {
+            "file": "src/index.js",
+            "line": 572,
+            "description": "Export current logger to use it on node",
+            "class": "logger"
+        }
+    ],
+    "warnings": [
+        {
+            "message": "unknown tag: date",
+            "line": " src/index.js:2"
+        },
+        {
+            "message": "unknown tag: copyright",
+            "line": " src/index.js:2"
+        },
+        {
+            "message": "Missing item type\nYocto logger.\n\nA custom logger wrapper based on winston for nodejs\n\nFor more details on these dependencies read links below :\n - Winston : https://github.com/flatiron/winston\n - LodAsh :\n - Chalk : \n - momentjs : \n - string-format : https://www.npmjs.com/package/string-format\n - uuid :\n - fs :\n - path :\n\nBy default a console is configured with default options (cf winston documentation for more details)\nPossibility to use the logger with these levels :\n - error\n - warning\n - info\n - debug\n - verbose\n\nA Banner function is available to display on console.log a more significant message.\n\nFor each examples, please read file on example directory.",
+            "line": " src/index.js:2"
+        },
+        {
+            "message": "Missing item type\nExport current logger to use it on node",
+            "line": " src/index.js:572"
+        }
+    ]
+}

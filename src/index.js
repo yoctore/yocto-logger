@@ -1,10 +1,32 @@
+'use strict';
 /**
- * Dependencies
- * @documentation : https://github.com/flatiron/winston
- * @see : http://tostring.it/2014/06/23/advanced-logging-with-nodejs/
- * @see : https://www.npmjs.org/package/winston
- https://www.npmjs.com/package/string-format
- 
+ * Yocto logger.
+ *
+ * A custom logger wrapper based on winston for nodejs
+ * 
+ * For more details on these dependencies read links below :
+ *  - Winston : https://github.com/flatiron/winston
+ *  - LodAsh :
+ *  - Chalk : 
+ *  - momentjs : 
+ *  - string-format : https://www.npmjs.com/package/string-format
+ *  - uuid :
+ *  - fs :
+ *  - path :
+ *
+ * By default a console is configured with default options (cf winston documentation for more details)
+ * Possibility to use the logger with these levels :
+ *  - error
+ *  - warning
+ *  - info
+ *  - debug
+ *  - verbose
+ *
+ * A Banner function is available to display on console.log a more significant message.
+ *
+ * For each examples, please read file on example directory.
+ *
+ * @date : 21/04/2015
  * @author :  Mathieu ROBERT <mathieu@yocto.re>
  * @copyright : Yocto SAS, All right reserved
  */
@@ -23,22 +45,6 @@ format.extend(String.prototype);
 
 // Allow to display errors
 winston.emitErrs  = false;
-
-/**
- * Setting up the rotate file log for the current app
- */
-/*var transportFile = new winston.transports.DailyRotateFile({
-  level             : config.logger.transports.transport.level            || 'info',
-  dirname           : config.logger.transports.transport.dirname          || './',
-  filename          : config.logger.transports.transport.filename         || (__filename + '.log'),
-  handleExceptions  : config.logger.transports.transport.handleExceptions || true,
-  json              : config.logger.transports.transport.json             || true,
-  maxsize           : config.logger.transports.transport.maxsize          || 5242880,
-  maxFiles          : config.logger.transports.transport.maxFiles         || 5,
-  colorize          : config.logger.transports.transport.colorize         || true,
-  datePattern       : config.logger.transports.transport.datePattern      || 'yyyy-MM-dd'
-});
-*/
 
 /**
  * Custom logger manager
@@ -175,7 +181,7 @@ function Logger() {
 
     // returning the correct message format
     return dformat.format(dataToLog);
-  }
+  };
 
   /**
    * Default function to get a current date format
@@ -185,7 +191,7 @@ function Logger() {
    */
   var timestampFormatter = function() {
     return moment().format("DD/MM/YYYY HH:mm:ss");
-  }
+  };
 
   /**
    * Default label function to retrive the correct label to display on logger
@@ -213,7 +219,7 @@ function Logger() {
 
     // return correct value
     return value;
-  }
+  };
 
   /**
    * Default function to colorize the log level with chalk
@@ -241,7 +247,7 @@ function Logger() {
 
     // return default value
     return 'white';
-  }
+  };
 
   /**
    * Default console formatter. use all data to render the correct message format to the logger formatter
@@ -252,7 +258,7 @@ function Logger() {
    */  
   this.consoleTransportFormatter = function(options) {
     return transportFormatter(options, true);
-  }
+  };
 
   /**
    * Default daily rotate file formatter. use all data to render the correct message format to the logger formatter
@@ -263,7 +269,7 @@ function Logger() {
    */  
   this.dailyRotateFileTransportFormatter = function(options) {
     return transportFormatter(options, false);
-  }
+  };
 
   /**
    * Default console transport
@@ -315,7 +321,7 @@ function Logger() {
     transports  : [ new (winston.transports.Console)(_.clone(this.defaultConsoleTransport)) ],
     exitOnError : false
   });  
-};
+}
 
 /**
  * Adding transport on logger module
@@ -399,7 +405,7 @@ Logger.prototype.addDailyRotateTransport = function(fullpath, filename, options)
       });
     }
   });
-}
+};
 
 /**
  * Default process function, get the current level and log our own message and metdata
@@ -448,7 +454,7 @@ Logger.prototype.process = function(level, message, meta) {
       }
     }
   }, this);
-}
+};
 
 /**
  * Log message and metadata with the current verbose level
@@ -460,7 +466,7 @@ Logger.prototype.process = function(level, message, meta) {
 Logger.prototype.verbose = function(message, meta) {
   // call main log process with verbose level
   this.process(this.VERBOSE_LOG_LEVEL.level, message, meta);
-}
+};
 
 /**
  * Log message and metadata with the current info level
@@ -472,7 +478,7 @@ Logger.prototype.verbose = function(message, meta) {
 Logger.prototype.info = function(message, meta) {
   // call main log process with info level
   this.process(this.INFO_LOG_LEVEL.level, message, meta);
-}
+};
 
 /**
  * Log message and metadata with the current warning level
@@ -484,7 +490,7 @@ Logger.prototype.info = function(message, meta) {
 Logger.prototype.warning = function(message, meta) {
   // call main log process with warning level
   this.process(this.WARNING_LOG_LEVEL.level, message, meta);
-}
+};
 
 /**
  * Log message and metadata with the current error level
@@ -496,7 +502,7 @@ Logger.prototype.warning = function(message, meta) {
 Logger.prototype.error = function(message, meta) {
     // call main log process with error level
   this.process(this.ERROR_LOG_LEVEL.level, message, meta);
-}
+};
 
 /**
  * Log message and metadata with the current debug level
@@ -508,7 +514,7 @@ Logger.prototype.error = function(message, meta) {
 Logger.prototype.debug = function(message, meta) {
     // call main log process with debug level
   this.process(this.DEBUG_LOG_LEVEL.level, message, meta);
-}
+};
 
 /**
  * Log a banner message on console
@@ -561,7 +567,7 @@ Logger.prototype.banner = function(message, cstyle) {
       console.log(endmessage);
       console.log(_.repeat(style.bottomDelimiter, endmessage.length));      
   }
-}
+};
 
 /**
  * Export current logger to use it on node
