@@ -80,8 +80,25 @@
 <div class="file">
     <pre class="code prettyprint linenums">
 &#x27;use strict&#x27;;
+
+var winston       = require(&#x27;winston&#x27;);
+var _             = require(&#x27;lodash&#x27;);
+var chalk         = require(&#x27;chalk&#x27;);
+var moment        = require(&#x27;moment&#x27;);
+var format        = require(&#x27;string-format&#x27;);
+var uuid          = require(&#x27;uuid&#x27;);
+var fs            = require(&#x27;fs&#x27;);
+var path          = require(&#x27;path&#x27;);
+
+// must extend String.prottype for use format to a method mode
+format.extend(String.prototype);
+
+// Allow to display errors
+winston.emitErrs  = false;
+
 /**
- * Yocto logger.
+ * Yocto logger manager. Manage your own logger request
+ *
  *
  * A custom logger wrapper based on winston for nodejs
  * 
@@ -108,29 +125,8 @@
  * For each examples, please read file on example directory.
  *
  * @date : 21/04/2015
- * @author :  Mathieu ROBERT &lt;mathieu@yocto.re&gt;
+ * @author : Mathieu ROBERT &lt;mathieu@yocto.re&gt;
  * @copyright : Yocto SAS, All right reserved
- */
-
-var winston       = require(&#x27;winston&#x27;);
-var _             = require(&#x27;lodash&#x27;);
-var chalk         = require(&#x27;chalk&#x27;);
-var moment        = require(&#x27;moment&#x27;);
-var format        = require(&#x27;string-format&#x27;);
-var uuid          = require(&#x27;uuid&#x27;);
-var fs            = require(&#x27;fs&#x27;);
-var path          = require(&#x27;path&#x27;);
-
-// must extend String.prottype for use format to a method mode
-format.extend(String.prototype);
-
-// Allow to display errors
-winston.emitErrs  = false;
-
-/**
- * Custom logger manager
- * Manage your own logger request
- *
  * @class logger
  */
 function Logger() {

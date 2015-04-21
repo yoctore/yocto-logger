@@ -1,6 +1,23 @@
 'use strict';
+
+var winston       = require('winston');
+var _             = require('lodash');
+var chalk         = require('chalk');
+var moment        = require('moment');
+var format        = require('string-format');
+var uuid          = require('uuid');
+var fs            = require('fs');
+var path          = require('path');
+
+// must extend String.prottype for use format to a method mode
+format.extend(String.prototype);
+
+// Allow to display errors
+winston.emitErrs  = false;
+
 /**
- * Yocto logger.
+ * Yocto logger manager. Manage your own logger request
+ *
  *
  * A custom logger wrapper based on winston for nodejs
  * 
@@ -27,29 +44,8 @@
  * For each examples, please read file on example directory.
  *
  * @date : 21/04/2015
- * @author :  Mathieu ROBERT <mathieu@yocto.re>
+ * @author : Mathieu ROBERT <mathieu@yocto.re>
  * @copyright : Yocto SAS, All right reserved
- */
-
-var winston       = require('winston');
-var _             = require('lodash');
-var chalk         = require('chalk');
-var moment        = require('moment');
-var format        = require('string-format');
-var uuid          = require('uuid');
-var fs            = require('fs');
-var path          = require('path');
-
-// must extend String.prottype for use format to a method mode
-format.extend(String.prototype);
-
-// Allow to display errors
-winston.emitErrs  = false;
-
-/**
- * Custom logger manager
- * Manage your own logger request
- *
  * @class logger
  */
 function Logger() {

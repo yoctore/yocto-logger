@@ -2,19 +2,18 @@
 /**
  * Gruntfile.js is used to configure or define tasks and load Grunt plugins.
  *
+ * Use uglify with Grunt to minify all ".js" file in documentation
+ * Use yuidoc to generate the docs
+ * 
  * @class Gruntfile
+ * @module Grunt file 
  * @date 21/04/2015
  * @author ROBERT Mathieu <mathieu@yocto.re>
  * @copyright Yocto SAS, All Right Reserved <http://www.yocto.re>
- */
-
-/**
- * Use uglify with Grunt to minify all ".js" file in documentation
- * Use yuidoc to generate the docs
  *
- * @module Grunt file
  */
  module.exports = function(grunt) {
+   // init config
    grunt.initConfig({
      // default package
      pkg : grunt.file.readJSON('package.json'),
@@ -24,9 +23,9 @@
       * @submodule jshint
       */
      jshint : {
-       options: {
-           node:true,
-           yui:true,
+       options : {
+           node : true,
+           yui : true,
        },
        all : [ 'src/index.js' ]
      },
@@ -44,7 +43,7 @@
          url         : '<%= pkg.homepage %>',
          options     : {
            paths   : '.',
-           outdir  : 'documentation/src',
+           outdir  : 'documentation',
            exclude : 'Gruntfile.js, example, dist, documentation, node_modules'
          }
        },

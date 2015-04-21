@@ -3,7 +3,7 @@
         "name": "yocto-logger",
         "description": "Logger utility for yocto core stack based on winston",
         "version": "0.1.1",
-        "url": "http://yocto.re"
+        "url": "http://www.yocto.re"
     },
     "files": {
         "src/index.js": {
@@ -27,23 +27,17 @@
             "plugin_for": [],
             "extension_for": [],
             "file": "src/index.js",
-            "line": 49,
-            "description": "Custom logger manager\nManage your own logger request"
+            "line": 18,
+            "description": "Yocto logger manager. Manage your own logger request\n\n\nA custom logger wrapper based on winston for nodejs\n\nFor more details on these dependencies read links below :\n - Winston : https://github.com/flatiron/winston\n - LodAsh :\n - Chalk : \n - momentjs : \n - string-format : https://www.npmjs.com/package/string-format\n - uuid :\n - fs :\n - path :\n\nBy default a console is configured with default options (cf winston documentation for more details)\nPossibility to use the logger with these levels :\n - error\n - warning\n - info\n - debug\n - verbose\n\nA Banner function is available to display on console.log a more significant message.\n\nFor each examples, please read file on example directory.",
+            "date": ": 21/04/2015",
+            "author": ": Mathieu ROBERT <mathieu@yocto.re>",
+            "copyright": ": Yocto SAS, All right reserved"
         }
     },
     "classitems": [
         {
             "file": "src/index.js",
-            "line": 2,
-            "description": "Yocto logger.\n\nA custom logger wrapper based on winston for nodejs\n\nFor more details on these dependencies read links below :\n - Winston : https://github.com/flatiron/winston\n - LodAsh :\n - Chalk : \n - momentjs : \n - string-format : https://www.npmjs.com/package/string-format\n - uuid :\n - fs :\n - path :\n\nBy default a console is configured with default options (cf winston documentation for more details)\nPossibility to use the logger with these levels :\n - error\n - warning\n - info\n - debug\n - verbose\n\nA Banner function is available to display on console.log a more significant message.\n\nFor each examples, please read file on example directory.",
-            "date": ": 21/04/2015",
-            "author": ":  Mathieu ROBERT <mathieu@yocto.re>",
-            "copyright": ": Yocto SAS, All right reserved",
-            "class": "logger"
-        },
-        {
-            "file": "src/index.js",
-            "line": 57,
+            "line": 53,
             "description": "Default log level",
             "itemtype": "property",
             "name": "logLevel",
@@ -53,7 +47,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 65,
+            "line": 61,
             "description": "Default const to define console type\nsee : https://www.npmjs.com/package/winston#console-transport",
             "itemtype": "property",
             "name": "TYPE_CONSOLE",
@@ -63,7 +57,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 75,
+            "line": 71,
             "description": "Default const to define daily rotate file \nsee : https://www.npmjs.com/package/winston#daily-rotate-file-transport",
             "itemtype": "property",
             "name": "TYPE_DAILY_ROTATE_FILE",
@@ -73,7 +67,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 85,
+            "line": 81,
             "description": "Default const to define error log level rules on current class",
             "itemtype": "property",
             "name": "ERROR_LOG_LEVEL",
@@ -82,7 +76,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 93,
+            "line": 89,
             "description": "Default const to define warning log level rules on current class",
             "itemtype": "property",
             "name": "WARNING_LOG_LEVEL",
@@ -91,7 +85,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 101,
+            "line": 97,
             "description": "Default const to define info log level rules on current class",
             "itemtype": "property",
             "name": "INFO_LOG_LEVEL",
@@ -100,7 +94,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 109,
+            "line": 105,
             "description": "Default const to define debug log level rules on current class",
             "itemtype": "property",
             "name": "DEBUG_LOG_LEVEL",
@@ -109,7 +103,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 117,
+            "line": 113,
             "description": "Default const to define verbose log level rules on current class",
             "itemtype": "property",
             "name": "VERBOSE_LOG_LEVEL",
@@ -118,7 +112,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 126,
+            "line": 122,
             "description": "Default formatter. use all data to render the correct message format to the logger formatter",
             "itemtype": "method",
             "name": "formatter",
@@ -142,7 +136,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 186,
+            "line": 182,
             "description": "Default function to get a current date format",
             "itemtype": "method",
             "name": "timestamp",
@@ -154,7 +148,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 196,
+            "line": 192,
             "description": "Default label function to retrive the correct label to display on logger",
             "itemtype": "method",
             "name": "labelFormatter",
@@ -173,7 +167,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 224,
+            "line": 220,
             "description": "Default function to colorize the log level with chalk",
             "itemtype": "method",
             "name": "colorize",
@@ -190,7 +184,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 252,
+            "line": 248,
             "description": "Default console formatter. use all data to render the correct message format to the logger formatter",
             "itemtype": "method",
             "name": "formatter",
@@ -209,7 +203,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 263,
+            "line": 259,
             "description": "Default daily rotate file formatter. use all data to render the correct message format to the logger formatter",
             "itemtype": "method",
             "name": "formatter",
@@ -228,7 +222,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 274,
+            "line": 270,
             "description": "Default console transport",
             "itemtype": "property",
             "name": "defaultConsoleTransport",
@@ -237,7 +231,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 292,
+            "line": 288,
             "description": "Default daily rotate transport file",
             "itemtype": "property",
             "name": "defaultDailyRotateTransportFile",
@@ -246,7 +240,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 314,
+            "line": 310,
             "description": "Default winston instance logger",
             "itemtype": "property",
             "name": "winston",
@@ -255,7 +249,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 326,
+            "line": 322,
             "description": "Adding transport on logger module",
             "itemtype": "method",
             "name": "addTransport",
@@ -280,7 +274,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 410,
+            "line": 406,
             "description": "Default process function, get the current level and log our own message and metdata",
             "itemtype": "method",
             "name": "process",
@@ -298,7 +292,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 459,
+            "line": 455,
             "description": "Log message and metadata with the current verbose level",
             "itemtype": "method",
             "name": "verbose",
@@ -318,7 +312,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 471,
+            "line": 467,
             "description": "Log message and metadata with the current info level",
             "itemtype": "method",
             "name": "verbose",
@@ -338,7 +332,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 483,
+            "line": 479,
             "description": "Log message and metadata with the current warning level",
             "itemtype": "method",
             "name": "verbose",
@@ -358,7 +352,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 495,
+            "line": 491,
             "description": "Log message and metadata with the current error level",
             "itemtype": "method",
             "name": "verbose",
@@ -378,7 +372,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 507,
+            "line": 503,
             "description": "Log message and metadata with the current debug level",
             "itemtype": "method",
             "name": "verbose",
@@ -398,7 +392,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 519,
+            "line": 515,
             "description": "Log a banner message on console",
             "itemtype": "method",
             "name": "banner",
@@ -421,7 +415,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 572,
+            "line": 568,
             "description": "Export current logger to use it on node",
             "class": "logger"
         }
@@ -429,19 +423,15 @@
     "warnings": [
         {
             "message": "unknown tag: date",
-            "line": " src/index.js:2"
+            "line": " src/index.js:18"
         },
         {
             "message": "unknown tag: copyright",
-            "line": " src/index.js:2"
-        },
-        {
-            "message": "Missing item type\nYocto logger.\n\nA custom logger wrapper based on winston for nodejs\n\nFor more details on these dependencies read links below :\n - Winston : https://github.com/flatiron/winston\n - LodAsh :\n - Chalk : \n - momentjs : \n - string-format : https://www.npmjs.com/package/string-format\n - uuid :\n - fs :\n - path :\n\nBy default a console is configured with default options (cf winston documentation for more details)\nPossibility to use the logger with these levels :\n - error\n - warning\n - info\n - debug\n - verbose\n\nA Banner function is available to display on console.log a more significant message.\n\nFor each examples, please read file on example directory.",
-            "line": " src/index.js:2"
+            "line": " src/index.js:18"
         },
         {
             "message": "Missing item type\nExport current logger to use it on node",
-            "line": " src/index.js:572"
+            "line": " src/index.js:568"
         }
     ]
 }
