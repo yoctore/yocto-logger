@@ -23,7 +23,7 @@
   "files" : [
     "src",
     "dist",
-    "documentation"
+    "documentation",
     "example"    
   ],  
   "dependencies" : {
