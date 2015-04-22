@@ -22,14 +22,14 @@ winston.emitErrs  = false;
  * A custom logger wrapper based on winston for nodejs
  * 
  * For more details on these dependencies read links below :
- *  - Winston : https://github.com/flatiron/winston
- *  - LodAsh :
- *  - Chalk : 
- *  - momentjs : 
- *  - string-format : https://www.npmjs.com/package/string-format
- *  - uuid :
- *  - fs :
- *  - path :
+ * - Winston : https://github.com/flatiron/winston
+ * - LodAsh : https://lodash.com/
+ * - Chalk : https://www.npmjs.com/package/chalk
+ * - momentjs : http://momentjs.com/
+ * - string-format : https://www.npmjs.com/package/string-format
+ * - uuid : https://www.npmjs.com/package/uuid
+ * - fs : https://nodejs.org/api/fs.html
+ * - path : https://nodejs.org/api/path.html
  *
  * By default a console is configured with default options (cf winston documentation for more details)
  * Possibility to use the logger with these levels :
