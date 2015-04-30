@@ -17,7 +17,9 @@ For more details on used dependencies read links below :
   - uuid : https://www.npmjs.com/package/uuid
   - fs : https://nodejs.org/api/fs.html
   - path : https://nodejs.org/api/path.html
-  
+  - events : https://nodejs.org/api/events.html
+  - util : https://nodejs.org/api/util.html
+
   
 By default a console is configured with default options (cf winston documentation for more details)
  
@@ -73,4 +75,17 @@ logger.warning("meta data warning",{mymeta:"warning"});
 logger.error("meta data error",{mymeta:"error"});
 logger.banner("Banner customized",{color:"red",bgColor:"white"});
 logger.banner("Banner customized with invalid color",{color:"red",bgColor:"myColor"});
+```
+
+##### Handle success and failure event on daily transport
+
+```javascript
+logger.addDailyRotateTransport().success(function() {
+  // process here
+});
+
+logger.addDailyRotateTransport().failure(function() {
+  // process here
+});
+
 ```

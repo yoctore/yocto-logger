@@ -1,8 +1,20 @@
-var logger = require("../index");
+var logger = require("../src/index");
 
-logger.banner("Adding new default transport");
-logger.addDailyRotateTransport();
+logger.banner("Adding new default transport with handle success & failure");
+
+logger.addDailyRotateTransport().success(function() {
+  logger.disableConsole();
+  logger.info("logging a string");
+  logger.banner("Adding new default transport - Test directory");
+  logger.enableConsole();
+  logger.info("logging a string");
+  logger.disableExceptions(); 
+  logger.enableExceptions();
+});
+
+logger.disableConsole();
 logger.banner("Adding new default transport - Test directory");
+logger.enableConsole();
 logger.addDailyRotateTransport(__dirname+"/test-directory");
 logger.addDailyRotateTransport(void 0,void 0,{name:"my-new-daily",level:"debug"});
 logger.addDailyRotateTransport(__dirname+"/test-directory/test-directory-no-access");
@@ -21,4 +33,4 @@ logger.debug("meta data debug",{mymeta:"debug"});
 logger.warning("meta data warning",{mymeta:"warning"});
 logger.error("meta data error",{mymeta:"error"});
 logger.banner("Banner customized",{color:"red",bgColor:"white"});
-logger.banner("Banner customized with invalid color",{color:"red",bgColor:"myColor"});
+logger.banner("Banner customized with invalid color",{color:"red",bgColor:"myColor"}); 

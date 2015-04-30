@@ -8,6 +8,8 @@ var format        = require('string-format');
 var uuid          = require('uuid');
 var fs            = require('fs');
 var path          = require('path');
+var emmitter      = require("events").EventEmitter;
+var util          = require('util');
 
 // must extend String.prottype for use format to a method mode
 format.extend(String.prototype);
@@ -30,6 +32,8 @@ winston.emitErrs  = false;
  * - uuid : https://www.npmjs.com/package/uuid
  * - fs : https://nodejs.org/api/fs.html
  * - path : https://nodejs.org/api/path.html
+ * - events : https://nodejs.org/api/events.html
+ * - util : https://nodejs.org/api/util.html
  *
  * By default a console is configured with default options (cf winston documentation for more details)
  * Possibility to use the logger with these levels :
@@ -46,10 +50,9 @@ winston.emitErrs  = false;
  * @date : 21/04/2015
  * @author : Mathieu ROBERT <mathieu@yocto.re>
  * @copyright : Yocto SAS, All right reserved
- * @class logger
+ * @class Logger
  */
 function Logger() {
-
   /**
    * Default log level
    * @property logLevel
@@ -122,9 +125,9 @@ function Logger() {
   /**
    * Default formatter. use all data to render the correct message format to the logger formatter
    *
-   * @method formatter
-   * @param {Object} default options to use
-   * @param {Boolean} if truen enable colorize process, false otherwise
+   * @method transportFormatter
+   * @param {Object} default default options to use
+   * @param {Boolean} colorize if true enable colorize process, false otherwise
    * @return {String} the correct string to use on current transporter
    */  
   var transportFormatter = function(options, colorize) {        
@@ -193,7 +196,7 @@ function Logger() {
    * Default label function to retrive the correct label to display on logger
    *
    * @method labelFormatter
-   * @param {String} value to check
+   * @param {String} value value to check
    * @return {String} the correct value to display
    */  
   var labelFormatter =  function(value) {
@@ -221,7 +224,7 @@ function Logger() {
    * Default function to colorize the log level with chalk
    * 
    * @method colorize
-   * @param (String) current level to use
+   * @param (String) level current level to use
    * @return (String) current color to use on chalk
    */
   var colorizeFormatter  = function(level) {
@@ -248,8 +251,8 @@ function Logger() {
   /**
    * Default console formatter. use all data to render the correct message format to the logger formatter
    *
-   * @method formatter
-   * @param {Object} default options to use
+   * @method consoleTransportFormatter
+   * @param {Object} options default options to use
    * @return {String} the correct string to use on current transporter
    */  
   this.consoleTransportFormatter = function(options) {
@@ -259,8 +262,8 @@ function Logger() {
   /**
    * Default daily rotate file formatter. use all data to render the correct message format to the logger formatter
    *
-   * @method formatter
-   * @param {Object} default options to use
+   * @method dailyRotateFileTransportFormatter
+   * @param {Object} options default options to use
    * @return {String} the correct string to use on current transporter
    */  
   this.dailyRotateFileTransportFormatter = function(options) {
@@ -275,7 +278,7 @@ function Logger() {
    */
   this.defaultConsoleTransport = {
     level             : 'verbose',
-    handleExceptions  : true,
+    handleExceptions  : false,
     json              : false,
     showLevel         : true,
     silent            : false,
@@ -314,20 +317,99 @@ function Logger() {
    * @type Object
    */
   this.winston = new (winston.Logger)({
-    transports  : [ new (winston.transports.Console)(_.clone(this.defaultConsoleTransport)) ],
+    transports  : [ 
+      new (winston.transports.Console)(_.clone(this.defaultConsoleTransport)) 
+    ],
     exitOnError : false
-  });  
+  });
 }
+
+// process inheritance of emiter to my object.
+// We need to process this here beacuse inherits remove all previous prototype declaration 
+util.inherits(Logger, emmitter);
+
+/**
+ * Wrapper function to enable log on console
+ * @param {Boolean} status true if we need to enable false otherwise
+ */ 
+Logger.prototype.enableConsole = function(status) {
+  // has a valid status
+  status = _.isBoolean(status) ? status : true;
+
+  // requirements check
+  if (_.has(this.winston.transports, 'console')) {
+
+    // has property silent 
+    if (_.has(this.winston.transports.console, 'silent')) {
+
+      // disabled
+      this.winston.transports.console.silent = !status;      
+
+      // is enabled ?
+      if (status) {
+        // log enable message if enable failed message will be appear on dailyrotate if set  
+        this.info('[ Logger.enableConsole ] - enable console on current logger');        
+      }      
+    }
+  }
+};
+
+/**
+ * Wrapper function to disable log on console
+ */ 
+Logger.prototype.disableConsole = function() {
+  // log
+  this.info('[ Logger.disableConsole ] - disable console on current logger');  
+
+  // enable
+  this.enableConsole(false);
+};
+
+/**
+ * Success function for emit event. catch all success for call process
+ *
+ * @param {Function} callback callback to use success event
+ * @return {Object} current instance
+ */
+Logger.prototype.success = function(callback) {
+  
+  // setting up the default callback
+  callback = (!_.isUndefined(callback) && !_.isNull(callback) & _.isFunction(callback)) ? callback : function() {};  
+
+  // catch event and call callback  
+  this.on('success', callback);
+
+  // returning current instance
+  return this;
+};
+
+/**
+ * Success function for emit event. catch all failure for call process
+ *
+ * @param {Function} callback callback to use failure event
+ * @return {Object} current instance
+ */
+Logger.prototype.failure = function(callback) {
+  // setting up the default callback
+  callback = (!_.isUndefined(callback) && !_.isNull(callback) & _.isFunction(callback)) ? callback : function() {};  
+
+  // catch event and call callback  
+  this.on('failure', callback);
+
+  // returning current instance
+  return this;
+};
 
 /**
  * Adding transport on logger module
  * 
- * @method addTransport
- * @param {String} path to use
- * @param {String} filename to use
- * @param {Object} Override options on daily rotate
+ * @method addDailyRotateTransport
+ * @param {String} path path to use
+ * @param {String} filename filename to use
+ * @param {Object} override options on daily rotate
+ * @param {Function} callback callback function to use if is set
  */
-Logger.prototype.addDailyRotateTransport = function(fullpath, filename, options) {
+Logger.prototype.addDailyRotateTransport = function(fullpath, filename, options, callback) {
   
   // path is valid type ? transform to default value if not
   if (_.isUndefined(fullpath) || !_.isString(fullpath) || _.isNull(fullpath)) {
@@ -374,14 +456,14 @@ Logger.prototype.addDailyRotateTransport = function(fullpath, filename, options)
             if (_.isString(filename) && !_.isEmpty(filename)) {
               _.extend(daily, { filename : filename });              
             } else {
-              context.warning([ '[ Add New Daily Rotate Transport ] - filename is not a string. retore filename to ', daily.filename ].join(' '));
+              context.warning([ '[ Add New Daily Rotate Transport ] - filename is not a string. restore filename to ', daily.filename ].join(' '));
             }
           }
 
           // winston is available ?? 
           if (!_.isUndefined(context.winston)) {
             // transport already exists ?
-            if (_.has(context.winston.transports, daily.name)) {              
+            if (_.has(context.winston.transports, daily.name)) {
               context.warning([ '[ Add New Daily Rotate Transport ] - A transport with the name', daily.name, 'already exists. Removing current before adding new transport' ].join(' '));
               context.winston.remove(daily.name);
             }
@@ -391,24 +473,33 @@ Logger.prototype.addDailyRotateTransport = function(fullpath, filename, options)
             
             // build name for logging message
             filename = [ fullpath, daily.filename, moment().format(daily.datePattern.replace('.log', '').toUpperCase()), '.log' ].join('');
-            // log            
+            // log
             context.info([ '[ Add New Daily Rotate Transport ] - Success ! Datas are logged in', filename ].join(' '));
 
+            // emit sucess event
+            context.emit('success');
           } else {
             console.log(chalk.red('[ Add New Daily Rotate Transport ] - Cannot add new transport. instance is invalid'));
+
+            /// emit failure event
+            context.emit('failure');
           }
         }
       });
     }
   });
+  
+  // return context for chaining
+  return this;
 };
 
 /**
  * Default process function, get the current level and log our own message and metdata
  *
  * @method process
- * @param (Integer), level, the current log level
- * @param (Mixed), messsagen the current message to display
+ * @param {Integer} level level to use on current log level
+ * @param {Mixed} message default message to display
+ * @param {Mixed} meta default meta to send on logger
  */
 Logger.prototype.process = function(level, message, meta) {
   // Mixing all error object
@@ -456,8 +547,8 @@ Logger.prototype.process = function(level, message, meta) {
  * Log message and metadata with the current verbose level
  *
  * @method verbose
- * @param {String} message to send on logger
- * @param {Object} metadata to send on logger
+ * @param {String} message message to send on logger
+ * @param {Object} meta metadata to send on logger
  */
 Logger.prototype.verbose = function(message, meta) {
   // call main log process with verbose level
@@ -467,9 +558,9 @@ Logger.prototype.verbose = function(message, meta) {
 /**
  * Log message and metadata with the current info level
  *
- * @method verbose
- * @param {String} message to send on logger
- * @param {Object} metadata to send on logger
+ * @method info
+ * @param {String} message message to send on logger
+ * @param {Object} meta metadata to send on logger
  */
 Logger.prototype.info = function(message, meta) {
   // call main log process with info level
@@ -479,9 +570,9 @@ Logger.prototype.info = function(message, meta) {
 /**
  * Log message and metadata with the current warning level
  *
- * @method verbose
- * @param {String} message to send on logger
- * @param {Object} metadata to send on logger
+ * @method warning
+ * @param {String} message message to send on logger
+ * @param {Object} meta metadata to send on logger
  */
 Logger.prototype.warning = function(message, meta) {
   // call main log process with warning level
@@ -491,9 +582,9 @@ Logger.prototype.warning = function(message, meta) {
 /**
  * Log message and metadata with the current error level
  *
- * @method verbose
- * @param {String} message to send on logger
- * @param {Object} metadata to send on logger
+ * @method error
+ * @param {String} message message to send on logger
+ * @param {Object} meta metadata to send on logger
  */
 Logger.prototype.error = function(message, meta) {
     // call main log process with error level
@@ -503,9 +594,9 @@ Logger.prototype.error = function(message, meta) {
 /**
  * Log message and metadata with the current debug level
  *
- * @method verbose
- * @param {String} message to send on logger
- * @param {Object} metadata to send on logger
+ * @method debug
+ * @param {String} message message to send on logger
+ * @param {Object} meta metadata to send on logger
  */
 Logger.prototype.debug = function(message, meta) {
     // call main log process with debug level
@@ -516,7 +607,7 @@ Logger.prototype.debug = function(message, meta) {
  * Log a banner message on console
  *
  * @method banner
- * @param {String} message to send on logger
+ * @param {String} message message to send on logger
  * @param {Object} cstyle style to use on banner based on chalk rules
  *
  * @example
@@ -552,6 +643,7 @@ Logger.prototype.banner = function(message, cstyle) {
   // build end message
   var endmessage  = [ style.leftDelimiter, message, style.rightDelimiter ].join(' '); 
 
+  // check properties
   if (_.has(chalk.styles, style.color) && _.has(chalk.styles, style.bgColor)) {
     // log full message
     console.log(chalk[style.color][style.bgColor](_.repeat(style.topDelimiter, endmessage.length)));  
@@ -568,4 +660,4 @@ Logger.prototype.banner = function(message, cstyle) {
 /**
  * Export current logger to use it on node
  */
-module.exports  = new (Logger)();
+module.exports = new (Logger)();

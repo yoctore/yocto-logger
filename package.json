@@ -21,7 +21,6 @@
     "node" : ">=0.12.2"
   },
   "files" : [
-    "src",
     "dist",
     "documentation",
     "example"    

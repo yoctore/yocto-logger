@@ -1,7 +1,7 @@
 YUI.add("yuidoc-meta", function(Y) {
    Y.YUIDoc = { meta: {
     "classes": [
-        "logger"
+        "Logger"
     ],
     "modules": [],
     "allModules": []
