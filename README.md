@@ -1,11 +1,11 @@
-
-
-
 # Yocto Logger
 
 This module manage your own logger request on your node app.
 
-This module his based on winston for node js package 
+This module his based on winston for node js package : https://github.com/flatiron/winston
+
+
+## Dependencies
 
 For more details on used dependencies read links below :
 
@@ -20,6 +20,7 @@ For more details on used dependencies read links below :
   - events : https://nodejs.org/api/events.html
   - util : https://nodejs.org/api/util.html
 
+## Default Configuration
   
 By default a console is configured with default options (cf winston documentation for more details)
  
@@ -32,10 +33,10 @@ Possibility to use the logger with these levels :
   
 A Banner function is available to display on console.log a more significant message.
 
-### Examples : 
+## Examples : 
 
 
-##### Adding new transport with banner usage
+#### Adding new transport with banner usage
 
 ```javascript
 var logger = require('yocto-logger');
@@ -44,7 +45,7 @@ logger.banner("Adding new default transport");
 logger.addDailyRotateTransport();
 ```
 
-##### Adding new transport with some tests on directory
+#### Adding new transport with some tests on directory
 
 ```javascript
 var logger = require('yocto-logger');
@@ -58,7 +59,7 @@ logger.addDailyRotateTransport(__dirname+"/test-directory","");
 logger.addDailyRotateTransport(__dirname+"/test-directory","my-file-name");
 ```
 
-##### Default login usage examples
+#### Default login usage examples
 
 ```javascript
 var logger = require('yocto-logger');
