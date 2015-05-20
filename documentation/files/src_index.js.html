@@ -168,7 +168,7 @@ function Logger() {
    * @property ERROR_LOG_LEVEL
    * @type Object
    */
-  this.ERROR_LOG_LEVEL          = { name : &#x27;error&#x27;,   level : 1, f : &#x27;error&#x27;   };
+  this.ERROR_LOG_LEVEL          = { name : &#x27;error&#x27;,   level : 1, fn : &#x27;error&#x27;   };
 
   /**
    * Default const to define warning log level rules on current class
@@ -176,7 +176,7 @@ function Logger() {
    * @property WARNING_LOG_LEVEL
    * @type Object
    */
-  this.WARNING_LOG_LEVEL        = { name : &#x27;warning&#x27;, level : 2, f : &#x27;warn&#x27;    };
+  this.WARNING_LOG_LEVEL        = { name : &#x27;warning&#x27;, level : 2, fn : &#x27;warn&#x27;    };
 
   /**
    * Default const to define info log level rules on current class
@@ -184,24 +184,23 @@ function Logger() {
    * @property INFO_LOG_LEVEL
    * @type Object
    */  
-  this.INFO_LOG_LEVEL           = { name : &#x27;info&#x27;,    level : 3, f : &#x27;info&#x27;    };
-
-  /**
-   * Default const to define debug log level rules on current class
-   * 
-   * @property DEBUG_LOG_LEVEL
-   * @type Object
-   */
-  this.DEBUG_LOG_LEVEL          = { name : &#x27;debug&#x27;,   level : 4, f : &#x27;debug&#x27;   };
-
+  this.INFO_LOG_LEVEL           = { name : &#x27;info&#x27;,    level : 3, fn : &#x27;info&#x27;    };
+  
   /**
    * Default const to define verbose log level rules on current class
    * 
    * @property VERBOSE_LOG_LEVEL
    * @type Object
    */
-  this.VERBOSE_LOG_LEVEL        = { name : &#x27;verbose&#x27;, level : 5, f : &#x27;verbose&#x27; };
+  this.VERBOSE_LOG_LEVEL        = { name : &#x27;verbose&#x27;, level : 4, fn : &#x27;verbose&#x27; };
   
+  /**
+   * Default const to define debug log level rules on current class
+   * 
+   * @property DEBUG_LOG_LEVEL
+   * @type Object
+   */
+  this.DEBUG_LOG_LEVEL          = { name : &#x27;debug&#x27;,   level : 5, fn : &#x27;debug&#x27;   };
 
   /**
    * Default formatter. use all data to render the correct message format to the logger formatter
@@ -358,7 +357,7 @@ function Logger() {
    * @type Object 
    */
   this.defaultConsoleTransport = {
-    level             : &#x27;verbose&#x27;,
+    level             : &#x27;debug&#x27;,
     handleExceptions  : false,
     json              : false,
     showLevel         : true,
@@ -417,21 +416,26 @@ Logger.prototype.enableConsole = function(status) {
   // has a valid status
   status = _.isBoolean(status) ? status : true;
 
-  // requirements check
-  if (_.has(this.winston.transports, &#x27;console&#x27;)) {
-
-    // has property silent 
-    if (_.has(this.winston.transports.console, &#x27;silent&#x27;)) {
-
-      // disabled
-      this.winston.transports.console.silent = !status;      
-
-      // is enabled ?
-      if (status) {
-        // log enable message if enable failed message will be appear on dailyrotate if set  
-        this.info(&#x27;[ Logger.enableConsole ] - enable console on current logger&#x27;);        
-      }      
-    }
+  // check instance existence ?? 
+  if (!_.isUndefined(this.winston.transports) || !_.isNull(this.winston.transports) &amp;&amp; _.isObject(this.winston.transports)) {
+    // requirements check
+    if (_.has(this.winston.transports, &#x27;console&#x27;)) {
+  
+      // has property silent 
+      if (_.has(this.winston.transports.console, &#x27;silent&#x27;)) {
+  
+        // disabled
+        this.winston.transports.console.silent = !status;      
+  
+        // is enabled ?
+        if (status) {
+          // log enable message if enable failed message will be appear on dailyrotate if set  
+          this.info(&#x27;[ Logger.enableConsole ] - enable console on current logger&#x27;);        
+        }      
+      }
+    }    
+  } else {
+     console.log(chalk.red(&quot;[ Logger.enableConsole ] - winston doesn&#x27;t exists.&quot;));
   }
 };
 
@@ -495,7 +499,7 @@ Logger.prototype.addDailyRotateTransport = function(fullpath, filename, options,
   // path is valid type ? transform to default value if not
   if (_.isUndefined(fullpath) || !_.isString(fullpath) || _.isNull(fullpath)) {
     fullpath = &#x27;./&#x27;;   
-    this.warning(&#x27;[ Add New Daily Rotate Transport ] - Invalid path given. Using default path &quot;./&quot;&#x27;);
+    this.warning(&#x27;[ Logger.addDailyRotateTransport ] - Invalid path given. Using default path &quot;./&quot;&#x27;);
   }
   
   // normalize path
@@ -510,14 +514,14 @@ Logger.prototype.addDailyRotateTransport = function(fullpath, filename, options,
 
     // is directory ?    
     if (!stats || !stats.isDirectory()) {
-      context.error([ &#x27;[ Add New Daily Rotate Transport ] - Directory path : [&#x27;, fullpath, &#x27;] is invalid. Operation aborted !&#x27; ].join(&#x27; &#x27;));
+      context.error([ &#x27;[ Logger.addDailyRotateTransport ] - Directory path : [&#x27;, fullpath, &#x27;] is invalid. Operation aborted !&#x27; ].join(&#x27; &#x27;));
     } else {
       // check permission
       fs.access(fullpath, fs.F_OK | fs.R_OK | fs.W_OK, function(err) {
 
         // can read / write ??? 
         if (err) {
-          context.error([ &#x27;[ Add New Daily Rotate Transport ] - Cannot read and write on&#x27;, fullpath, &#x27; - operation aborted !&#x27; ].join(&#x27; &#x27;));     
+          context.error([ &#x27;[ Logger.addDailyRotateTransport ] - Cannot read and write on&#x27;, fullpath, &#x27; - operation aborted !&#x27; ].join(&#x27; &#x27;));     
         } else {
           // build object configuration
           var daily = _.clone(context.defaultDailyRotateTransportFile);
@@ -537,7 +541,7 @@ Logger.prototype.addDailyRotateTransport = function(fullpath, filename, options,
             if (_.isString(filename) &amp;&amp; !_.isEmpty(filename)) {
               _.extend(daily, { filename : filename });              
             } else {
-              context.warning([ &#x27;[ Add New Daily Rotate Transport ] - filename is not a string. restore filename to &#x27;, daily.filename ].join(&#x27; &#x27;));
+              context.warning([ &#x27;[ Logger.addDailyRotateTransport ] - filename is not a string. restore filename to &#x27;, daily.filename ].join(&#x27; &#x27;));
             }
           }
 
@@ -545,7 +549,7 @@ Logger.prototype.addDailyRotateTransport = function(fullpath, filename, options,
           if (!_.isUndefined(context.winston)) {
             // transport already exists ?
             if (_.has(context.winston.transports, daily.name)) {
-              context.warning([ &#x27;[ Add New Daily Rotate Transport ] - A transport with the name&#x27;, daily.name, &#x27;already exists. Removing current before adding new transport&#x27; ].join(&#x27; &#x27;));
+              context.warning([ &#x27;[ Logger.addDailyRotateTransport ] - A transport with the name&#x27;, daily.name, &#x27;already exists. Removing current before adding new transport&#x27; ].join(&#x27; &#x27;));
               context.winston.remove(daily.name);
             }
             
@@ -555,12 +559,12 @@ Logger.prototype.addDailyRotateTransport = function(fullpath, filename, options,
             // build name for logging message
             filename = [ fullpath, daily.filename, moment().format(daily.datePattern.replace(&#x27;.log&#x27;, &#x27;&#x27;).toUpperCase()), &#x27;.log&#x27; ].join(&#x27;&#x27;);
             // log
-            context.info([ &#x27;[ Add New Daily Rotate Transport ] - Success ! Datas are logged in&#x27;, filename ].join(&#x27; &#x27;));
+            context.info([ &#x27;[ Logger.addDailyRotateTransport ] - Success ! Datas are logged in&#x27;, filename ].join(&#x27; &#x27;));
 
             // emit sucess event
             context.emit(&#x27;success&#x27;);
           } else {
-            console.log(chalk.red(&#x27;[ Add New Daily Rotate Transport ] - Cannot add new transport. instance is invalid&#x27;));
+            console.log(chalk.red(&#x27;[ Logger.addDailyRotateTransport ] - Cannot add new transport. instance is invalid&#x27;));
 
             /// emit failure event
             context.emit(&#x27;failure&#x27;);
@@ -582,46 +586,104 @@ Logger.prototype.addDailyRotateTransport = function(fullpath, filename, options,
  * @param {Mixed} message default message to display
  * @param {Mixed} meta default meta to send on logger
  */
-Logger.prototype.process = function(level, message, meta) {
-  // Mixing all error object
-  var all       = [ this.VERBOSE_LOG_LEVEL, this.INFO_LOG_LEVEL, this.WARNING_LOG_LEVEL, this.ERROR_LOG_LEVEL, this.DEBUG_LOG_LEVEL ];
-
-  // setting up the max level to log
-  var maxLevel  = this.logLevel || 5;
-
-  // need a reference for test
-  var ref       = maxLevel;
-
-  // parse all log object to get the correct reference
-  _.each(all, function(value, key, list) {
-    if (_.isString(maxLevel)) {
-      if (maxLevel === value.name) {
-        ref = value.level;
+Logger.prototype.process = function(level, message, meta) { 
+  
+  try {
+    // check instance before process
+    if (!_.isUndefined(this.winston) &amp;&amp; !_.isNull(this.winston)) {
+      // has function ?
+      if (_.has(level, &#x27;fn&#x27;)) {
+        // has meta ?
+        if (!_.isUndefined(meta)) {
+          // log with data + meta
+          this.winston.log(level.fn, message, meta);                
+        } else {
+            // log with data
+            this.winston.log(level.fn, message);              
+        }        
+      } else {
+          // search function is undefined throw error
+          throw &#x27;Fn function is undefined or null. cannot process log&#x27;;
       }
+    } else {
+        // winston is undefined throw error
+        throw &#x27;Cannot une winston logger. instance is undefined or null&#x27;;
+    }    
+  } catch (e) {
+      console.log(chalk.red([ &#x27;[ Logger.process ] -&#x27;, e ].join(&#x27; &#x27;)));
+  }
+};
+
+/**
+ * Default function to change level of logs
+ *
+ * @method changeLevel
+ *
+ */
+Logger.prototype.changeLevel = function(o, n, isless) {
+  // all error
+  var levels = [ this.ERROR_LOG_LEVEL, this.WARNING_LOG_LEVEL, this.INFO_LOG_LEVEL, this.VERBOSE_LOG_LEVEL, this.DEBUG_LOG_LEVEL ];
+
+  // assign current level to current var
+  this.logLevel = n;
+  
+  // checking if new is not old level =&gt; the same =&gt; no changes needed
+  if (o != n) {
+    // test if is less and log if needed
+    if (!_.isUndefined(isless) &amp;&amp; _.isBoolean(isless) &amp;&amp; isless) {
+      this.info([ &#x27;[ Logger.changeLevel ] - Try to change level from&#x27;, levels[o - 1].name, &#x27;to&#x27;, levels[n - 1].name ].join(&#x27; &#x27;));        
+    } else {
+      this.info([ &#x27;[ Logger.changeLevel ] - Try to change level from&#x27;, levels[n - 1].name, &#x27;to&#x27;, levels[o - 1].name ].join(&#x27; &#x27;)); 
     }
-  });
+  } else {
+      // logging changes
+      this.info([ &#x27;[ Logger.changeLevel ] - Kepping level to&#x27;, levels[this.logLevel - 1].name ].join(&#x27; &#x27;));              
+  }
 
-  // save the main scope to use it 
-  var $this = this;
-
-  // parse again and call the specific function
-  _.each(all, function(value, key, list) {
-    if (_.isNumber(ref)) {
-      if (level &lt;= ref) {
-        if (value.level == level) {
-          if (!_.isUndefined(this.winston) &amp;&amp; !_.isNull(this.winston) &amp;&amp; _) {
-            if (!_.isUndefined(meta)) {
-              this.winston.log(value.f, message, meta);                
-            } else {
-              this.winston.log(value.f, message);              
-            }            
-          } else {
-            console.log(chalk.red(&#x27;[ Logger.process ] - Cannot une winston logger. instance is undefined or null&#x27;));
-          }
-        }
+  // winston is here
+  if (!_.isUndefined(this.winston.transports) || !_.isNull(this.winston.transports) &amp;&amp; _.isObject(this.winston.transports)) {
+    _.each(this.winston.transports, function(transport) {
+      if (_.has(transport, &#x27;level&#x27;)) {
+        transport.level = levels[this.logLevel - 1].name;
       }
-    }
-  }, this);
+    }, this);
+  }
+  
+  // return current instance
+  return this;
+};
+
+/**
+ * Default function to change level of log to more level
+ *
+ * @method more
+ */
+Logger.prototype.more = function() {
+
+  // getting default value for log changing
+  var o = this.logLevel;
+  var n = o &lt; 5 ? (o + 1) : o;
+
+  // show what we process
+  this.info(&#x27;[ Logger.more ] - Requesting more logs&#x27;);
+  // changing level and returning instance
+  return this.changeLevel(o, n);
+};
+
+/**
+ * Default function to change level of log to less level
+ *
+ * @method less
+ */
+Logger.prototype.less = function() {
+  // getting default value for log changing
+  var o = this.logLevel;
+  var n = o &gt; 1 ? (o - 1) : o;
+
+  // show what we process
+  this.info(&#x27;[ Logger.less ] - Requesting less logs&#x27;);
+  // changing level and returning instance
+  return this.changeLevel(o, n, true);
 };
 
 /**
@@ -633,7 +695,7 @@ Logger.prototype.process = function(level, message, meta) {
  */
 Logger.prototype.verbose = function(message, meta) {
   // call main log process with verbose level
-  this.process(this.VERBOSE_LOG_LEVEL.level, message, meta);
+  this.process(this.VERBOSE_LOG_LEVEL, message, meta);
 };
 
 /**
@@ -645,7 +707,7 @@ Logger.prototype.verbose = function(message, meta) {
  */
 Logger.prototype.info = function(message, meta) {
   // call main log process with info level
-  this.process(this.INFO_LOG_LEVEL.level, message, meta);
+  this.process(this.INFO_LOG_LEVEL, message, meta);
 };
 
 /**
@@ -657,7 +719,7 @@ Logger.prototype.info = function(message, meta) {
  */
 Logger.prototype.warning = function(message, meta) {
   // call main log process with warning level
-  this.process(this.WARNING_LOG_LEVEL.level, message, meta);
+  this.process(this.WARNING_LOG_LEVEL, message, meta);
 };
 
 /**
@@ -669,7 +731,7 @@ Logger.prototype.warning = function(message, meta) {
  */
 Logger.prototype.error = function(message, meta) {
     // call main log process with error level
-  this.process(this.ERROR_LOG_LEVEL.level, message, meta);
+  this.process(this.ERROR_LOG_LEVEL, message, meta);
 };
 
 /**
@@ -681,7 +743,7 @@ Logger.prototype.error = function(message, meta) {
  */
 Logger.prototype.debug = function(message, meta) {
     // call main log process with debug level
-  this.process(this.DEBUG_LOG_LEVEL.level, message, meta);
+  this.process(this.DEBUG_LOG_LEVEL, message, meta);
 };
 
 /**

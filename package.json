@@ -1,44 +1,47 @@
 {
-  "name" : "yocto-logger",
-  "description" : "Logger utility for yocto core stack based on winston",
-  "version" : "0.1.1",
-  "private" : true,
-  "scripts" : {},
-  "homepage" : "http://www.yocto.re",
-  "author" : {
-    "name" : "Yocto SAS <http://www.yocto.re>"
+  "name": "yocto-logger",
+  "description": "Logger utility for yocto core stack based on winston",
+  "version": "0.1.1",
+  "private": true,
+  "scripts": {},
+  "homepage": "http://www.yocto.re",
+  "author": {
+    "name": "Yocto SAS <http://www.yocto.re>"
   },
-  "contributors" : [{
-    "name"  : "ROBERT Mathieu",
-    "email" : "mathieu@yocto.re"
-  }],
-  "main" : "dist/index.js",
-  "repository" : {
-    "type" : "git",
-    "url" : "git+ssh:://git@lab.yocto.digital:yocto-node-modules/yocto-logger.git"
+  "contributors": [
+    {
+      "name": "ROBERT Mathieu",
+      "email": "mathieu@yocto.re"
+    }
+  ],
+  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh:://git@lab.yocto.digital:yocto-node-modules/yocto-logger.git"
   },
-  "engines" : {
-    "node" : ">=0.12.2"
+  "engines": {
+    "node": ">=0.12.2"
   },
-  "files" : [
+  "files": [
     "dist",
     "documentation",
-    "example"    
-  ],  
-  "dependencies" : {
-    "winston" : "latest",
-    "lodash" : "latest",
-    "chalk" : "latest",
-    "moment" : "latest",
-    "string-format" : "latest",
-    "uuid" : "latest"
+    "example"
+  ],
+  "dependencies": {
+    "winston": "latest",
+    "lodash": "latest",
+    "chalk": "latest",
+    "moment": "latest",
+    "string-format": "latest",
+    "uuid": "latest"
   },
-  "devDependencies" : {
-    "grunt" : "~0.4.5",
-    "grunt-contrib-copy" : "^0.8.0",
-    "grunt-contrib-jshint" : "~0.10.0",
-    "grunt-contrib-nodeunit" : "~0.4.1",
-    "grunt-contrib-uglify" : "~0.5.0",
-    "grunt-contrib-yuidoc" : "^0.7.0"
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "grunt-contrib-copy": "^0.8.0",
+    "grunt-contrib-jshint": "~0.10.0",
+    "grunt-contrib-nodeunit": "~0.4.1",
+    "grunt-contrib-uglify": "~0.5.0",
+    "grunt-contrib-yuidoc": "^0.7.0",
+    "grunt-mocha-cli": "^1.13.0"
   }
 }

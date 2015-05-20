@@ -95,15 +95,6 @@
         {
             "file": "src/index.js",
             "line": 108,
-            "description": "Default const to define debug log level rules on current class",
-            "itemtype": "property",
-            "name": "DEBUG_LOG_LEVEL",
-            "type": "Object",
-            "class": "Logger"
-        },
-        {
-            "file": "src/index.js",
-            "line": 116,
             "description": "Default const to define verbose log level rules on current class",
             "itemtype": "property",
             "name": "VERBOSE_LOG_LEVEL",
@@ -112,7 +103,16 @@
         },
         {
             "file": "src/index.js",
-            "line": 125,
+            "line": 116,
+            "description": "Default const to define debug log level rules on current class",
+            "itemtype": "property",
+            "name": "DEBUG_LOG_LEVEL",
+            "type": "Object",
+            "class": "Logger"
+        },
+        {
+            "file": "src/index.js",
+            "line": 124,
             "description": "Default formatter. use all data to render the correct message format to the logger formatter",
             "itemtype": "method",
             "name": "transportFormatter",
@@ -136,7 +136,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 185,
+            "line": 184,
             "description": "Default function to get a current date format",
             "itemtype": "method",
             "name": "timestamp",
@@ -148,7 +148,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 195,
+            "line": 194,
             "description": "Default label function to retrive the correct label to display on logger",
             "itemtype": "method",
             "name": "labelFormatter",
@@ -167,7 +167,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 223,
+            "line": 222,
             "description": "Default function to colorize the log level with chalk",
             "itemtype": "method",
             "name": "colorize",
@@ -184,7 +184,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 251,
+            "line": 250,
             "description": "Default console formatter. use all data to render the correct message format to the logger formatter",
             "itemtype": "method",
             "name": "consoleTransportFormatter",
@@ -203,7 +203,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 262,
+            "line": 261,
             "description": "Default daily rotate file formatter. use all data to render the correct message format to the logger formatter",
             "itemtype": "method",
             "name": "dailyRotateFileTransportFormatter",
@@ -222,7 +222,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 273,
+            "line": 272,
             "description": "Default console transport",
             "itemtype": "property",
             "name": "defaultConsoleTransport",
@@ -231,7 +231,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 291,
+            "line": 290,
             "description": "Default daily rotate transport file",
             "itemtype": "property",
             "name": "defaultDailyRotateTransportFile",
@@ -240,7 +240,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 313,
+            "line": 312,
             "description": "Default winston instance logger",
             "itemtype": "property",
             "name": "winston",
@@ -249,7 +249,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 331,
+            "line": 330,
             "description": "Wrapper function to enable log on console",
             "params": [
                 {
@@ -262,13 +262,13 @@
         },
         {
             "file": "src/index.js",
-            "line": 357,
+            "line": 361,
             "description": "Wrapper function to disable log on console",
             "class": "Logger"
         },
         {
             "file": "src/index.js",
-            "line": 368,
+            "line": 372,
             "description": "Success function for emit event. catch all success for call process",
             "params": [
                 {
@@ -285,7 +285,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 386,
+            "line": 390,
             "description": "Success function for emit event. catch all failure for call process",
             "params": [
                 {
@@ -302,7 +302,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 403,
+            "line": 407,
             "description": "Adding transport on logger module",
             "itemtype": "method",
             "name": "addDailyRotateTransport",
@@ -332,7 +332,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 496,
+            "line": 500,
             "description": "Default process function, get the current level and log our own message and metdata",
             "itemtype": "method",
             "name": "process",
@@ -357,7 +357,31 @@
         },
         {
             "file": "src/index.js",
-            "line": 546,
+            "line": 536,
+            "description": "Default function to change level of logs",
+            "itemtype": "method",
+            "name": "changeLevel",
+            "class": "Logger"
+        },
+        {
+            "file": "src/index.js",
+            "line": 575,
+            "description": "Default function to change level of log to more level",
+            "itemtype": "method",
+            "name": "more",
+            "class": "Logger"
+        },
+        {
+            "file": "src/index.js",
+            "line": 592,
+            "description": "Default function to change level of log to less level",
+            "itemtype": "method",
+            "name": "less",
+            "class": "Logger"
+        },
+        {
+            "file": "src/index.js",
+            "line": 608,
             "description": "Log message and metadata with the current verbose level",
             "itemtype": "method",
             "name": "verbose",
@@ -377,7 +401,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 558,
+            "line": 620,
             "description": "Log message and metadata with the current info level",
             "itemtype": "method",
             "name": "info",
@@ -397,7 +421,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 570,
+            "line": 632,
             "description": "Log message and metadata with the current warning level",
             "itemtype": "method",
             "name": "warning",
@@ -417,7 +441,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 582,
+            "line": 644,
             "description": "Log message and metadata with the current error level",
             "itemtype": "method",
             "name": "error",
@@ -437,7 +461,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 594,
+            "line": 656,
             "description": "Log message and metadata with the current debug level",
             "itemtype": "method",
             "name": "debug",
@@ -457,7 +481,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 606,
+            "line": 668,
             "description": "Log a banner message on console",
             "itemtype": "method",
             "name": "banner",
@@ -480,7 +504,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 660,
+            "line": 722,
             "description": "Export current logger to use it on node",
             "class": "Logger"
         }
@@ -496,23 +520,23 @@
         },
         {
             "message": "Missing item type\nWrapper function to enable log on console",
-            "line": " src/index.js:331"
+            "line": " src/index.js:330"
         },
         {
             "message": "Missing item type\nWrapper function to disable log on console",
-            "line": " src/index.js:357"
+            "line": " src/index.js:361"
         },
         {
             "message": "Missing item type\nSuccess function for emit event. catch all success for call process",
-            "line": " src/index.js:368"
+            "line": " src/index.js:372"
         },
         {
             "message": "Missing item type\nSuccess function for emit event. catch all failure for call process",
-            "line": " src/index.js:386"
+            "line": " src/index.js:390"
         },
         {
             "message": "Missing item type\nExport current logger to use it on node",
-            "line": " src/index.js:660"
+            "line": " src/index.js:722"
         }
     ]
 }

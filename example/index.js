@@ -1,7 +1,23 @@
-var logger = require("../src/index");
+var logger = require("../src");
 
 logger.banner("Adding new default transport with handle success & failure");
 
+logger.verbose('TEST verbose');
+logger.debug('test debug');
+logger.info('test info');
+logger.warning('test warning');
+logger.error('test error');
+logger.more();
+logger.debug('aaa');
+logger.less();
+logger.debug('bbb');
+logger.verbose('bbb');
+logger.less();
+logger.verbose('ccc');
+logger.info('ccc');
+logger.less();
+// chaining
+logger.more().more().more();
 logger.addDailyRotateTransport().success(function() {
   logger.disableConsole();
   logger.info("logging a string");
