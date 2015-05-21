@@ -1,7 +1,7 @@
 {
   "name": "yocto-logger",
   "description": "Logger utility for yocto core stack based on winston",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "scripts": {},
   "homepage": "http://www.yocto.re",
