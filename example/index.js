@@ -20,14 +20,13 @@ logger.less();
 logger.more().more().more();
 logger.addDailyRotateTransport().success(function() {
   logger.disableConsole();
-  logger.info("logging a string");
+  logger.info("logging a string a");
   logger.banner("Adding new default transport - Test directory");
   logger.enableConsole();
-  logger.info("logging a string");
+  logger.info("logging a string b");
   logger.disableExceptions(); 
   logger.enableExceptions();
 });
-
 logger.disableConsole();
 logger.banner("Adding new default transport - Test directory");
 logger.enableConsole();
@@ -38,7 +37,7 @@ logger.addDailyRotateTransport(__dirname+"/test-directory",{filenameobj:""});
 logger.addDailyRotateTransport(__dirname+"/test-directory","");
 logger.addDailyRotateTransport(__dirname+"/test-directory","my-file-name");
 logger.banner("Default logging");
-logger.info("logging a string");
+logger.info("logging a string c");
 logger.debug(["a",1,2,3,4]);
 logger.warning({tata:"titi"});
 logger.error("An error omg");

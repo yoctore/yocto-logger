@@ -1,4 +1,5 @@
 'use strict';
+
 /**
  * Gruntfile.js is used to configure or define tasks and load Grunt plugins.
  *
@@ -18,36 +19,39 @@
      // default package
      pkg : grunt.file.readJSON('package.json'),
 
-     /**
-      * Jshint permit to flags suspicious usage in programs
-      * @submodule jshint
-      */
-     jshint : {
+     yoctohint : {
        options : {
-           node : true,
-           yui : true,
        },
        all : [ 'src/index.js' ]
      },
-
+    yoctodoc : {
+        dist : {
+            src: ['src/index.js'],
+            options: {
+              name : 'Yocto logger'
+            }
+        }
+    } ,    
      /**
       * Yuidoc permit to generate the yuidoc of the Yocto Stack Generator
       *
       * @submodule yuidoc
       */
-     yuidoc : {
+     /*yuidoc : {
        compile : {
-         name        : '<%= pkg.name %>',
+         name : '<%= pkg.name %>',
          description : '<%= pkg.description %>',
          version     : '<%= pkg.version %>',
          url         : '<%= pkg.homepage %>',
          options     : {
-           paths   : '.',
-           outdir  : 'documentation',
-           exclude : 'Gruntfile.js,example,dist,documentation,node_modules'
+           paths    : '.',
+           outdir   : 'documentation',
+           exclude  : 'Gruntfile.js,example,dist,documentation,node_modules',
+           themedir : "node_modules/yuidoc-lucid-theme",
+           helpers  : ["node_modules/yuidoc-lucid-theme/helpers/helpers.js"]           
          }
        },
-     },
+     },*/
 
     /**
      * Uglify permit to minify javascript file
@@ -77,15 +81,16 @@
       }     
    });
 
-   // Load the plugins
-   grunt.loadNpmTasks('grunt-contrib-jshint');
+
    grunt.loadNpmTasks('grunt-contrib-uglify');
-   grunt.loadNpmTasks('grunt-contrib-yuidoc');
    grunt.loadNpmTasks('grunt-mocha-cli');
+   grunt.loadNpmTasks('yoctohint');
+   grunt.loadNpmTasks('yoctodoc');
    
    // register tasks
-   grunt.registerTask('default', [ 'jshint', 'mochacli','yuidoc', 'uglify' ]);
-   grunt.registerTask('norme', 'jshint');   
+   grunt.registerTask('default', [ 'yoctohint', 'mochacli','yuidoc', 'uglify' ]);
+   grunt.registerTask('hint', [ 'yoctohint' ]);   
    grunt.registerTask('tests', 'mochacli');   
-   grunt.registerTask('build', [ 'jshint', 'yuidoc', 'uglify' ]);  
+   grunt.registerTask('build', [ 'yoctohint', 'yuidoc', 'uglify' ]);  
+   grunt.registerTask('doc', [ 'yoctodoc' ]);
  };

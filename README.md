@@ -90,3 +90,28 @@ logger.addDailyRotateTransport().failure(function() {
 });
 
 ```
+
+* For more details on these dependencies read links below :
+ * - Winston : https://github.com/flatiron/winston
+ * - LodAsh : https://lodash.com/
+ * - Chalk : https://www.npmjs.com/package/chalk
+ * - momentjs : http://momentjs.com/
+ * - string-format : https://www.npmjs.com/package/string-format
+ * - uuid : https://www.npmjs.com/package/uuid
+ * - fs : https://nodejs.org/api/fs.html
+ * - path : https://nodejs.org/api/path.html
+ * - events : https://nodejs.org/api/events.html
+ * - util : https://nodejs.org/api/util.html
+ *
+ * By default a console is configured with default options
+ * (cf winston documentation for more details)
+ * Possibility to use the logger with these levels :
+ *  - error
+ *  - warning
+ *  - info
+ *  - debug
+ *  - verbose
+ *
+ * A Banner function is available to display on console.log a more significant message.
+ *
+ * For each examples, please read file on example directory.
