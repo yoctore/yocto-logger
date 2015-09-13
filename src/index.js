@@ -254,7 +254,10 @@ function Logger () {
     silent            : false,
     label             : labelFormatter,
     formatter         : this.consoleTransportFormatter,
-    timestamp         : null,
+    timestamp         : function () {
+      // return special timestamp format
+      return moment().format('DD/MM/YYYY h:mm:ss');
+    },
     colorize          : colorizeFormatter
   };
 

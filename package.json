@@ -1,8 +1,7 @@
 {
   "name": "yocto-logger",
-  "description": "Logger utility for yocto core stack based on winston",
-  "version": "0.1.2",
-  "private": true,
+  "description": "Logger utility based on winston.",
+  "version": "1.0.0",
   "scripts": {},
   "author": {
     "name": "ROBERT Mathieu",
@@ -19,7 +18,7 @@
   "main": "dist/index.js",
   "repository": {
     "type": "git",
-    "url": "git+ssh:://git@lab.yocto.digital:yocto-node-modules/yocto-logger.git"
+    "url": "https://gitlab.com/yocto-node-modules/yocto-logger.git"
   },
   "licenses": [
     {
@@ -36,19 +35,18 @@
     "example"
   ],
   "dependencies": {
-    "winston": "latest",
-    "lodash": "latest",
-    "chalk": "latest",
-    "moment": "latest",
-    "string-format": "latest",
-    "uuid": "latest"
+    "chalk": "^1.1.1",
+    "lodash": "^3.10.1",
+    "moment": "^2.10.6",
+    "string-format": "^0.5.0",
+    "uuid": "^2.0.1",
+    "winston": "^1.0.1"
   },
   "devDependencies": {
     "grunt-contrib-copy": "^0.8.0",
     "grunt-contrib-nodeunit": "~0.4.1",
     "grunt-contrib-uglify": "~0.5.0",
     "grunt-mocha-cli": "^1.13.0",
-    "yoctohint": "git+ssh://git@lab.yocto.digital:yocto-node-modules/yocto-hint.git",
-    "yoctodoc": "git+ssh://git@lab.yocto.digital:yocto-node-modules/yocto-doc.git"    
+    "yocto-hint": "^1.0.9"
   }
 }
