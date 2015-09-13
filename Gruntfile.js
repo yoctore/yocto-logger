@@ -39,14 +39,13 @@ module.exports = function(grunt) {
     }     
   });
   
-  
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-mocha-cli');
   grunt.loadNpmTasks('yoctohint');
   
   // register tasks
   grunt.registerTask('default', [ 'yoctohint', 'mochacli', 'uglify' ]);
-  grunt.registerTask('hint', [ 'yoctohint' ]);   
-  grunt.registerTask('tests', 'mochacli');   
-  grunt.registerTask('build', [ 'yoctohint', 'yuidoc', 'uglify' ]);  
+  grunt.registerTask('hint', [ 'yoctohint' ]);
+  grunt.registerTask('tests', 'mochacli');
+  grunt.registerTask('build', [ 'yoctohint', 'yuidoc', 'uglify' ]);
 };
