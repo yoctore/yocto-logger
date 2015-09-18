@@ -1,6 +1,14 @@
 /**
+ * This module is a part of yocto modules for NodeJS.
+ *
+ * Please see https://www.npmjs.com/~yocto for complete list of available module (completed day after day).
+ *
+ * This module manage your own logger request on your node app.
+ *
+ * This module his based on winston package : https://github.com/flatiron/winston
+ *
  * @author Mathieu ROBERT <mathieu@yocto.re>
- * @copyright Yocto SAS, All right reserved <http://www.yocto.re>
+ * @copyright 2015 Yocto SAS, All right reserved <http://www.yocto.re>
  */
 'use strict';
 
@@ -12,8 +20,7 @@ var format        = require('string-format');
 var uuid          = require('uuid');
 var fs            = require('fs');
 var path          = require('path');
-var emmitter      = require('events').EventEmitter;
-var util          = require('util');
+var Promise       = require('promise');
 
 // Must extend String.prottype for use format to a method mode
 format.extend(String.prototype);
@@ -160,7 +167,7 @@ function Logger () {
    * @private
    */
   var timestampFormatter = function () {
-    return moment().format('DD/MM/YYYY HH:mm:ss'); // test
+    return moment().format('YYYY/MM/DD HH:mm:ss'); // test
   };
 
   /**
@@ -254,10 +261,7 @@ function Logger () {
     silent            : false,
     label             : labelFormatter,
     formatter         : this.consoleTransportFormatter,
-    timestamp         : function () {
-      // return special timestamp format
-      return moment().format('DD/MM/YYYY h:mm:ss');
-    },
+    timestamp         : timestampFormatter,
     colorize          : colorizeFormatter
   };
 
@@ -296,10 +300,6 @@ function Logger () {
     exitOnError : false
   });
 }
-
-// Process inheritance of emiter to my object.
-// We need to process this here beacuse inherits remove all previous prototype declaration
-util.inherits(Logger, emmitter);
 
 /**
  * Wrapper function to enable log on console
@@ -388,48 +388,12 @@ Logger.prototype.disableExceptions = function () {
 };
 
 /**
- * Success function for emit event. catch all success for call process
- *
- * @param {Function} callback callback to use success event
- * @return {Object} current instance
- */
-Logger.prototype.success = function (callback) {
-
-  // Setting up the default callback
-  callback = (!_.isUndefined(callback) && !_.isNull(callback) & _.isFunction(callback)) ? callback
-  : function () {};
-
-  // Catch event and call callback
-  this.on('success', callback);
-
-  // Returning current instance
-  return this;
-};
-
-/**
- * Success function for emit event. catch all failure for call process
- *
- * @param {Function} callback callback to use failure event
- * @return {Object} current instance
- */
-Logger.prototype.failure = function (callback) {
-  // Setting up the default callback
-  callback = (!_.isUndefined(callback) && !_.isNull(callback) && _.isFunction(callback)) ? callback
-  : function () {};
-
-  // Catch event and call callback
-  this.on('failure', callback);
-
-  // Returning current instance
-  return this;
-};
-
-/**
  * Adding transport on logger module
  *
  * @param {String} fullpath path to use
  * @param {String} filename filename to use
  * @param {Object} options override options value on daily rotate
+ * @return {Object} default instance of promise to use for catching response
  */
 Logger.prototype.addDailyRotateTransport = function (fullpath, filename, options) {
 
@@ -448,112 +412,120 @@ Logger.prototype.addDailyRotateTransport = function (fullpath, filename, options
   // Save current context
   var context = this;
 
-  // Check file
-  fs.lstat(fullpath, function (err, stats) {
+  // default message data for event dispatch
+  var message;
 
-    // Is directory ?
-    if (!stats || !stats.isDirectory()) {
-      context.error([
-        '[ Logger.addDailyRotateTransport ] - Directory path : [',
-        fullpath,
-        '] is invalid. Operation aborted !'
-      ].join(' '));
-    } else {
-      // Check permission
-      fs.access(fullpath, fs.F_OK | fs.R_OK | fs.W_OK, function (err) {
+  // return promise statement
+  return new Promise(function (fulfill, reject) {
+    // Check file
+    fs.lstat(fullpath, function (err, stats) {
 
-        // Can read / write ???
-        if (err) {
-          context.error([
-            '[ Logger.addDailyRotateTransport ] - Cannot read and write on',
-            fullpath,
-            ' - operation aborted !'
-          ].join(' '));
-        } else {
-          // Build object configuration
-          var daily = _.clone(context.defaultDailyRotateTransportFile);
+      // Is directory ?
+      if (!stats || !stats.isDirectory()) {
+        message = [ '[ Logger.addDailyRotateTransport ] - Directory path : [',
+                    fullpath, '] is invalid. Operation aborted !' ].join(' ');
 
-          // Extend daily
-          _.extend(daily, { dirname : fullpath });
+        // log message
+        context.error(message);
 
-          // Is a valid options ?
-          if (!_.isUndefined(options) && !_.isNull(options) && _.isObject(options)) {
-            _.extend(daily, options);
-          }
+        // failed so reject
+        reject(message);
+      } else {
+        // Check permission
+        fs.access(fullpath, fs.F_OK | fs.R_OK | fs.W_OK, function (err) {
+          // Can read / write ???
+          if (err) {
+            message = [ '[ Logger.addDailyRotateTransport ] - Cannot read and write on',
+                        fullpath, ' - operation aborted !' ].join(' ');
 
-          // Check if file is specified
-          if (!_.isUndefined(filename) && !_.isEmpty(filename) && !_.isNull(filename)) {
+            // log message
+            context.error(message);
 
-            // Is a valid file name
-            if (_.isString(filename) && !_.isEmpty(filename)) {
-              _.extend(daily, { filename : filename });
-            } else {
-              context.warning([
-                '[ Logger.addDailyRotateTransport ] -',
-                'filename is not a string. restore filename to',
-                daily.filename
-              ].join(' '));
-            }
-          }
-
-          // Winston is available ??
-          if (!_.isUndefined(context.winston)) {
-            // Transport already exists ?
-            if (_.has(context.winston.transports, daily.name)) {
-              context.warning([
-                '[ Logger.addDailyRotateTransport ] - A transport with the name',
-                daily.name,
-                'already exists. Removing current before adding new transport'
-              ].join(' '));
-
-              context.winston.remove(daily.name);
-            }
-
-            // Add new
-            context.winston.add(winston.transports.DailyRotateFile, daily);
-
-            // Build name for logging message
-            filename = [
-              fullpath,
-              '/',
-              daily.filename,
-              moment().format(daily.datePattern.replace('.log', '').toUpperCase()),
-              '.log'
-            ].join('');
-
-            // Log
-            context.info([
-              '[ Logger.addDailyRotateTransport ] - Success ! Datas are logged in',
-              filename
-            ].join(' '));
-
-            // Emit sucess event
-            context.emit('success');
+            // failed so reject
+            reject(message);
           } else {
-            console.log(chalk.red([
-              '[ Logger.addDailyRotateTransport ] -',
-              'Cannot add new transport. instance is invalid'
-            ].join(' ')));
+            // Build object configuration
+            var daily = _.clone(context.defaultDailyRotateTransportFile);
 
-            // Emit failure event
-            context.emit('failure');
+            // Extend daily
+            _.extend(daily, { dirname : fullpath });
+
+            // Is a valid options ?
+            if (!_.isUndefined(options) && !_.isNull(options) && _.isObject(options)) {
+              _.extend(daily, options);
+            }
+
+            // Check if file is specified
+            if (!_.isUndefined(filename) && !_.isEmpty(filename) && !_.isNull(filename)) {
+
+              // Is a valid file name
+              if (_.isString(filename) && !_.isEmpty(filename)) {
+                _.extend(daily, { filename : filename });
+              } else {
+                context.warning([
+                  '[ Logger.addDailyRotateTransport ] -',
+                  'filename is not a string. restore filename to',
+                  daily.filename
+                ].join(' '));
+              }
+            }
+
+            // Winston is available ??
+            if (!_.isUndefined(context.winston)) {
+              // Transport already exists ?
+              if (_.has(context.winston.transports, daily.name)) {
+                context.warning([
+                  '[ Logger.addDailyRotateTransport ] - A transport with the name',
+                  daily.name,
+                  'already exists. Removing current before adding new transport'
+                ].join(' '));
+
+                context.winston.remove(daily.name);
+              }
+
+              // Add new
+              context.winston.add(winston.transports.DailyRotateFile, daily);
+
+              // Build name for logging message
+              filename = [
+                fullpath,
+                '/',
+                daily.filename,
+                moment().format(daily.datePattern.replace('.log', '').toUpperCase()),
+                '.log'
+              ].join('');
+
+              // Log
+              context.info([
+                '[ Logger.addDailyRotateTransport ] - Success ! Datas are logged in',
+                filename
+              ].join(' '));
+
+              // Emit sucess event
+              fulfill('success');
+            } else {
+              message = [ '[ Logger.addDailyRotateTransport ] -',
+                          'Cannot add new transport. instance is invalid' ].join(' ');
+
+              // log message
+              context.error(message);
+
+              // Emit failure event
+              reject(message);
+            }
           }
-        }
-      });
-    }
+        });
+      }
+    });
   });
-
-  // Return context for chaining
-  return this;
 };
 
 /**
  * Default process function, get the current level and log our own message and metdata
  *
- * @method process
  * @param {Integer} level level to use on current log level
- * @param {Mixed} message default message to display
- * @param {Mixed} meta default meta to send on logger
+ * @param {String} message default message to display
+ * @param {Object} meta default meta to send on logger
  */
 Logger.prototype.process = function (level, message, meta) {
 
@@ -586,8 +558,9 @@ Logger.prototype.process = function (level, message, meta) {
 /**
  * Default function to change level of logs
  *
- * @method changeLevel
- *
+ * @param {Integer} o the current offset level
+ * @param {Integer} n the new offset level
+ * @param {Boolean} isless true if is for a less request false otherwise
  */
 Logger.prototype.changeLevel = function (o, n, isless) {
   // All error
@@ -623,7 +596,7 @@ Logger.prototype.changeLevel = function (o, n, isless) {
   } else {
     // Logging changes
     this.info([
-      '[ Logger.changeLevel ] - Kepping level to',
+      '[ Logger.changeLevel ] - Unchange level to',
       levels[this.logLevel - 1].name
     ].join(' '));
   }
@@ -645,8 +618,6 @@ Logger.prototype.changeLevel = function (o, n, isless) {
 
 /**
  * Default function to change level of log to more level
- *
- * @method more
  */
 Logger.prototype.more = function () {
 
@@ -662,8 +633,6 @@ Logger.prototype.more = function () {
 
 /**
  * Default function to change level of log to less level
- *
- * @method less
  */
 Logger.prototype.less = function () {
   // Getting default value for log changing
@@ -679,7 +648,6 @@ Logger.prototype.less = function () {
 /**
  * Log message and metadata with the current verbose level
  *
- * @method verbose
  * @param {String} message message to send on logger
  * @param {Object} meta metadata to send on logger
  */
@@ -691,7 +659,6 @@ Logger.prototype.verbose = function (message, meta) {
 /**
  * Log message and metadata with the current info level
  *
- * @method info
  * @param {String} message message to send on logger
  * @param {Object} meta metadata to send on logger
  */
@@ -703,7 +670,6 @@ Logger.prototype.info = function (message, meta) {
 /**
  * Log message and metadata with the current warning level
  *
- * @method warning
  * @param {String} message message to send on logger
  * @param {Object} meta metadata to send on logger
  */
@@ -715,7 +681,6 @@ Logger.prototype.warning = function (message, meta) {
 /**
  * Log message and metadata with the current error level
  *
- * @method error
  * @param {String} message message to send on logger
  * @param {Object} meta metadata to send on logger
  */
@@ -727,7 +692,6 @@ Logger.prototype.error = function (message, meta) {
 /**
  * Log message and metadata with the current debug level
  *
- * @method debug
  * @param {String} message message to send on logger
  * @param {Object} meta metadata to send on logger
  */
@@ -739,15 +703,8 @@ Logger.prototype.debug = function (message, meta) {
 /**
  * Log a banner message on console
  *
- * @method banner
  * @param {String} message message to send on logger
  * @param {Object} cstyle style to use on banner based on chalk rules
- *
- * @example
- *
- *      // eample with custom style
- *      instance.banner('test message', { color : 'white', bgColor : 'bgRed' });
- *      // This will display "test message" with bgRed and white text  *
  */
 Logger.prototype.banner = function (message, cstyle) {
   // default style

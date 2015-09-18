@@ -1,7 +1,6 @@
-var logger = require("../src");
+var logger = require("../dist");
 
 logger.banner("Adding new default transport with handle success & failure");
-
 logger.verbose('TEST verbose');
 logger.debug('test debug');
 logger.info('test info');
@@ -18,7 +17,7 @@ logger.info('ccc');
 logger.less();
 // chaining
 logger.more().more().more();
-logger.addDailyRotateTransport().success(function() {
+logger.addDailyRotateTransport().then(function(success) {
   logger.disableConsole();
   logger.info("logging a string a");
   logger.banner("Adding new default transport - Test directory");
@@ -26,6 +25,8 @@ logger.addDailyRotateTransport().success(function() {
   logger.info("logging a string b");
   logger.disableExceptions(); 
   logger.enableExceptions();
+}, function(error) {
+  console.log(error);
 });
 logger.disableConsole();
 logger.banner("Adding new default transport - Test directory");

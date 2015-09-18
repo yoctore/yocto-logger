@@ -1,80 +1,149 @@
 # Overwiew
 
+This module is a part of yocto modules for NodeJS. 
+
+Please see https://www.npmjs.com/~yocto for complete list of available module (completed day after day).
+
 This module manage your own logger request on your node app.
 
-This module his based on winston for node js package : https://github.com/flatiron/winston
+This module his based on winston package : https://github.com/flatiron/winston
+
+**IMPORTANT : This module is not a complete reimplantation of winston** we only use winston for the core process.
 
 ## Motivation
 
-This module was created to obtain an ready to use and pre-configured logger tools.
+In all of our project we use a logger library like winston. But all the time we need to
+configure again and again the same library. 
 
-## Default Configuration
-  
-By default a console is configured with default options (cf winston documentation for more details)
+That why we decided to create yocto-Logger.
+
+This tool is designed to be a very very simple and pre-configured and ready to use tool
+based on the universal logging library winston.
+
+## Configuration : console transport
+
+By default a console is configured with these options : 
+(Cf. winston & momentjs documentation for more details)
+
+```javascript
+{
+  level             : 'debug',
+  handleExceptions  : false,
+  json              : false,
+  showLevel         : true,
+  silent            : false,
+  timestamp         : function () {
+    // return special timestamp format
+    return moment().format('YYYY/MM/DD HH:mm:ss');
+  }
+};
+```
+## Configuration : daily rotate transport
+
+By default a daily rotate transport is configured with these options : 
+(Cf. winston & momentjs documentation for more details)
+
+```javascript
+{
+  name              : 'default-daily-rotate-transport',
+  level             : 'verbose',
+  dirname           : './',
+  filename          : uuid.v4(), // default name if name is not given
+  handleExceptions  : true,
+  json              : false,
+  maxsize           : 5242880,
+  maxFiles          : 5,
+  colorize          : true,
+  datePattern       : '-yyyy-MM-dd.log',
+  timestamp         : function () {
+    // return special timestamp format
+    return moment().format('YYYY/MM/DD HH:mm:ss');
+  }
+};
+```
+
+## Logging Method
+
+ Avaiblable methods are : 
  
-Possibility to use the logger with these levels :
-  - error
-  - warning
-  - info
-  - debug
-  - verbose
-  
-A Banner function is available to display on console.log a more significant message.
+- error (for error message)
+- warning (for warning message)
+- info (for information message)
+- debug (for debug message)
+- verbose (for normal message)
 
-## Examples : 
+```javascript
+var logger = require('yocto-logger');
+// error message
+logger.error('Hello world');
+// warning message
+logger.warning('Hello world');
+// info message
+logger.info('Hello world');
+// debug message
+logger.debug('Hello world');
+// verbose message
+logger.verbose('Hello world');
+// banner message
+logger.banner('Hello world');
+```
 
+## Banner Method 
 
-#### Adding new transport with banner usage
+To display on console.log a more significant message we implemened a banner method.
+You can customize style (color and background color) of message but is not save on available transports.
+
+```javascript
+var logger = require('yocto-logger');
+// banner usage
+logger.banner("Banner customized",{ color: "red" , bgColor: "white" });
+```
+
+## Transport : Adding a new daily rotate transport
 
 ```javascript
 var logger = require('yocto-logger');
 
-logger.banner("Adding new default transport");
+// add new daily rotate transport with default config
 logger.addDailyRotateTransport();
+
+// add new daily rotate transport and process new action when async is finish
+logger.addDailyRotateTransport().then(function(success) {
+    // your process here
+}, function(error) {
+    // error process here
+});
+
+// add new daily transport on specific path + changing filename and more options
+logger.addDailyRotateTransport('/your-new-path-here', 'your-file-name-here', {});
 ```
 
-#### Adding new transport with some tests on directory
+## Utility Methods
+
+For a better usage we can interact with all transport by utility methods.
+Methods available are : 
+
+- more  :to change the log level to a higher level
+- less  : to change the log level to a less level
+- enableConsole : to enable console transport if is disable
+- disableConsole : to disable console transport if is enable
+- enableExceptions : to enable catch exception on logger if is disable
+- disableExceptions : to disable catch exception on logger if is enable
 
 ```javascript
 var logger = require('yocto-logger');
 
-logger.banner("Adding new default transport - Test directory");
-logger.addDailyRotateTransport(__dirname+"/test-directory");
-logger.addDailyRotateTransport(void 0,void 0,{name:"my-new-daily",level:"debug"});
-logger.addDailyRotateTransport(__dirname+"/test-directory/test-directory-no-access");
-logger.addDailyRotateTransport(__dirname+"/test-directory",{filenameobj:""});
-logger.addDailyRotateTransport(__dirname+"/test-directory","");
-logger.addDailyRotateTransport(__dirname+"/test-directory","my-file-name");
+// Less & more - initial level is debug
+logger.more(); // level change to verbose
+logger.less(); // level change to debug
+
+// Others method
+logger.enableConsole();
+logger.disableConsole();
+logger.enableExceptions();
+logger.disableExceptions();
 ```
 
-#### Default login usage examples
 
-```javascript
-var logger = require('yocto-logger');
-logger.banner("Default logging");
-logger.info("logging a string");
-logger.debug(["a",1,2,3,4]);
-logger.warning({tata:"titi"});
-logger.error("An error omg");
-logger.verbose("laa");
-logger.banner("logging with meta");
-logger.info("meta data info",{mymeta:"info"});
-logger.debug("meta data debug",{mymeta:"debug"});
-logger.warning("meta data warning",{mymeta:"warning"});
-logger.error("meta data error",{mymeta:"error"});
-logger.banner("Banner customized",{color:"red",bgColor:"white"});
-logger.banner("Banner customized with invalid color",{color:"red",bgColor:"myColor"});
-```
 
-##### Handle success and failure event on daily transport
 
-```javascript
-logger.addDailyRotateTransport().success(function() {
-  // process here
-});
-
-logger.addDailyRotateTransport().failure(function() {
-  // process here
-});
-
-```

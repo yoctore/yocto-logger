@@ -1,32 +1,27 @@
 'use strict';
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
   // init config
   grunt.initConfig({
-   // default package
-   pkg : grunt.file.readJSON('package.json'),
-  
-   yoctohint : {
-     options : {
-     },
-     all : [ 'src/index.js' ]
-   },
-  /**
-   * Uglify permit to minify javascript file
-   *
-   * @submodule uglify
-   */
-   uglify : {
-     api : {
+    // default package
+    pkg       : grunt.file.readJSON('package.json'),
+
+    // hint our app
+    yoctohint : {
+      options  : {},
+      all      : [ 'src/index.js', 'Gruntfile.js' ]
+    },
+
+    // Uglify our app
+    uglify    : {
+      api : {
         src    : 'src/index.js',
         dest   : 'dist/index.js'
-     }
-   },
-  
-   /**
-    * Mocah unit test
-    */
-    mochacli : {
+      }
+    },
+
+    // test our app
+    mochacli  : {
       options : {
         'reporter'       : 'spec',
         'inline-diffs'   : false,
@@ -35,17 +30,18 @@ module.exports = function(grunt) {
         'check-leaks'    : true,
         'bail'           : false
       },
-      all : [ 'test/*.js' ]
-    }     
+      all     : [ 'test/*.js' ]
+    }
   });
-  
+
+  // load tasks
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-mocha-cli');
-  grunt.loadNpmTasks('yoctohint');
-  
+  grunt.loadNpmTasks('yocto-hint');
+
   // register tasks
-  grunt.registerTask('default', [ 'yoctohint', 'mochacli', 'uglify' ]);
   grunt.registerTask('hint', [ 'yoctohint' ]);
   grunt.registerTask('tests', 'mochacli');
-  grunt.registerTask('build', [ 'yoctohint', 'yuidoc', 'uglify' ]);
+  grunt.registerTask('build', [ 'yoctohint', 'uglify' ]);
+  grunt.registerTask('default', [ 'tests', 'build' ]);
 };
