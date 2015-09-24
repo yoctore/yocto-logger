@@ -1,7 +1,7 @@
 {
   "name": "yocto-logger",
   "description": "Ready to use logger utility based on winston.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {},
   "author": {
     "name": "ROBERT Mathieu",
@@ -23,7 +23,7 @@
   "bugs": {
     "url": "https://gitlab.com/yocto-node-modules/yocto-logger/issues"
   },
-  "licenses": "Apache-2.0",
+  "license": "Apache-2.0",
   "engines": {
     "node": ">=0.12.2"
   },

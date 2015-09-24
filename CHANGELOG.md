@@ -1,3 +1,7 @@
+## 1.0.1 (2015-09-25)
+
+- Change license field was invalid
+
 ## 1.0.0 (2015-09-17)
 
 Adding new functions :
