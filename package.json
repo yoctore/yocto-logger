@@ -1,14 +1,19 @@
 {
   "name": "yocto-logger",
   "description": "Ready to use logger utility based on winston.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "scripts": {},
   "author": {
-    "name": "ROBERT Mathieu",
-    "email": "mathieu@yocto.re",
+    "name": "Yocto SAS",
+    "email": "technique@yocto.re",
     "url": "http://www.yocto.re"
   },
-  "contributors": [],
+  "contributors": [
+    {
+      "name": "ROBERT Mathieu",
+      "email": "mathieu@yocto.re"
+    }
+  ],
   "maintainers": [
     {
       "name": "ROBERT Mathieu",

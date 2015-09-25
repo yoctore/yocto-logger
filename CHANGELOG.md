@@ -1,3 +1,7 @@
+## 1.0.2 (2015-09-25)
+
+- Minor changes on  package.json
+
 ## 1.0.1 (2015-09-25)
 
 - Change license field was invalid
