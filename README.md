@@ -1,6 +1,6 @@
 ## Overview
 
-This module is a part of yocto modules for NodeJS. 
+This module is a part of yocto node modules for NodeJS. 
 
 Please see https://www.npmjs.com/~yocto for complete list of available module (completed day after day).
 
