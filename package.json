@@ -1,7 +1,7 @@
 {
   "name": "yocto-logger",
   "description": "Ready to use logger utility based on winston.",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "scripts": {},
   "author": {
     "name": "Yocto SAS",
