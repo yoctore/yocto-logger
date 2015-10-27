@@ -1,3 +1,7 @@
+## 1.1.0 (2015-10-27)
+
+- Add a new method `changeLogLevel(name)` to change log level manually
+
 ## 1.0.2 (2015-09-25)
 
 - Minor changes on  package.json

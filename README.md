@@ -118,6 +118,28 @@ logger.addDailyRotateTransport().then(function(success) {
 logger.addDailyRotateTransport('/your-new-path-here', 'your-file-name-here', {});
 ```
 
+## Change level manually
+
+You can change current logger level manually by method `setLogLevel(name)`.
+
+Property `name` of this function must be one of these values :
+
+ 
+- error (for error message)
+- warning (for warning message)
+- info (for information message)
+- debug (for debug message)
+- verbose (for normal message)
+
+For example if we need to set current logger instance to `error` level : 
+
+```javascript
+var logger = require('yocto-logger');
+
+logger.setLogLevel('error);
+// YOUR Extra code here
+```
+
 ## Utility Methods
 
 For a better usage we can interact with all transport by utility methods.

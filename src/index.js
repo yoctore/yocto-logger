@@ -331,6 +331,7 @@ Logger.prototype.enableConsole = function (status) {
       }
     }
   } else {
+    // default log
     console.log(chalk.red([ '[ Logger.', fnName, ' ] - winston doesn\'t exists.' ].join('')));
   }
 };
@@ -551,6 +552,7 @@ Logger.prototype.process = function (level, message, meta) {
       throw 'Cannot une winston logger. instance is undefined or null';
     }
   } catch (e) {
+    // default log
     console.log(chalk.red([ '[ Logger.process ] -', e ].join(' ')));
   }
 };
@@ -561,6 +563,7 @@ Logger.prototype.process = function (level, message, meta) {
  * @param {Integer} o the current offset level
  * @param {Integer} n the new offset level
  * @param {Boolean} isless true if is for a less request false otherwise
+ * @return {Object} current instance for chaining
  */
 Logger.prototype.changeLevel = function (o, n, isless) {
   // All error
@@ -579,19 +582,37 @@ Logger.prototype.changeLevel = function (o, n, isless) {
   if (o !== n) {
     // Test if is less and log if needed
     if (!_.isUndefined(isless) && _.isBoolean(isless) && isless) {
-      this.info([
+      this.debug([
         '[ Logger.changeLevel ] - Try to change level from',
         levels[o - 1].name,
         'to',
         levels[n - 1].name
       ].join(' '));
     } else {
-      this.info([
+      this.debug([
         '[ Logger.changeLevel ] - Try to change level from',
         levels[n - 1].name,
         'to',
         levels[o - 1].name
       ].join(' '));
+    }
+
+    // Winston is here
+    if (!_.isUndefined(this.winston.transports) || !_.isNull(this.winston.transports) &&
+        _.isObject(this.winston.transports)) {
+
+      // parse all transport
+      _.each(this.winston.transports, function (transport) {
+        if (_.has(transport, 'level')) {
+          transport.level = levels[this.logLevel - 1].name;
+        }
+      }, this);
+
+      // info
+      this.info('[ Logger.changeLevel ] - Level was changed');
+    } else {
+      // error message
+      this.error('[ Logger.changeLevel ] - Cannot change level. Transport is not defined');
     }
   } else {
     // Logging changes
@@ -601,23 +622,51 @@ Logger.prototype.changeLevel = function (o, n, isless) {
     ].join(' '));
   }
 
-  // Winston is here
-  if (!_.isUndefined(this.winston.transports) || !_.isNull(this.winston.transports) &&
-      _.isObject(this.winston.transports)) {
-
-    _.each(this.winston.transports, function (transport) {
-      if (_.has(transport, 'level')) {
-        transport.level = levels[this.logLevel - 1].name;
-      }
-    }, this);
-  }
-
   // Return current instance
   return this;
 };
 
 /**
+ * Change log level manually
+ *
+ * @param {String} name name of level
+ * @return {Boolean|Object} false if error occured otherwise current instance for chaining
+ */
+Logger.prototype.setLogLevel = function (name) {
+
+  // All error
+  var levels = [
+    this.ERROR_LOG_LEVEL,
+    this.WARNING_LOG_LEVEL,
+    this.INFO_LOG_LEVEL,
+    this.VERBOSE_LOG_LEVEL,
+    this.DEBUG_LOG_LEVEL
+  ];
+
+  // search data
+  var current   = _.find(levels, 'level', this.logLevel);
+  // search data
+  var searched  = _.find(levels, 'name', name);
+
+  // value was founded ?
+  if (!_.isUndefined(searched) && _.has(searched, 'level') && _.isNumber(searched.level) &&
+      !_.isUndefined(current) && _.has(current, 'level') && _.isNumber(current.level)) {
+    // assing value
+    return this.changeLevel(this.logLevel, searched.level, (current.level > searched.level));
+  } else {
+    // warning message
+    this.warning([ '[ Logger.setLogLevel ] - Cannot change log level manually.',
+                   'Given level [', name, '] was not founded.' ].join(' '));
+  }
+
+  // default statement
+  return false;
+};
+
+/**
  * Default function to change level of log to more level
+ *
+ * @return {Object} current instance for chaining
  */
 Logger.prototype.more = function () {
 
@@ -633,6 +682,8 @@ Logger.prototype.more = function () {
 
 /**
  * Default function to change level of log to less level
+ *
+ * @return {Object} current instance for chaining
  */
 Logger.prototype.less = function () {
   // Getting default value for log changing
