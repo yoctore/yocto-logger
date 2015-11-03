@@ -485,7 +485,7 @@ Logger.prototype.addDailyRotateTransport = function (fullpath, filename, options
               }
 
               // Add new
-              context.winston.add(winston.transports.DailyRotateFile, daily);
+              context.winston.add(winston.transports.File, daily);
 
               // Build name for logging message
               filename = [

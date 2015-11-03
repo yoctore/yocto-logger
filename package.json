@@ -1,7 +1,7 @@
 {
   "name": "yocto-logger",
   "description": "Ready to use logger utility based on winston.",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "scripts": {},
   "author": {
     "name": "Yocto SAS",
@@ -30,7 +30,7 @@
   },
   "license": "Apache-2.0",
   "engines": {
-    "node": ">=0.12.2"
+    "node": ">=4.2.1"
   },
   "files": [
     "dist/index.js",
@@ -53,13 +53,14 @@
     "promise": "^7.0.4",
     "string-format": "^0.5.0",
     "uuid": "^2.0.1",
-    "winston": "^1.0.1"
+    "winston": "^2.0.1"
   },
   "devDependencies": {
+    "grunt": "^0.4.5",
     "grunt-contrib-copy": "^0.8.0",
     "grunt-contrib-nodeunit": "~0.4.1",
-    "grunt-contrib-uglify": "~0.9.0",
-    "grunt-mocha-cli": "^1.13.0",
-    "yocto-hint": "^1.1.5"
+    "grunt-contrib-uglify": "^0.10.0",
+    "grunt-mocha-cli": "^2.0.0",
+    "yocto-hint": "^1.2.6"
   }
 }
