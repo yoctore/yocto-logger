@@ -1,7 +1,7 @@
 {
   "name": "yocto-logger",
   "description": "Ready to use logger utility based on winston.",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "scripts": {},
   "author": {
     "name": "Yocto SAS",
@@ -23,10 +23,10 @@
   "main": "dist/index.js",
   "repository": {
     "type": "git",
-    "url": "https://gitlab.com/yocto-node-modules/yocto-logger.git"
+    "url": "https://github.com/yoctore/yocto-logger.git"
   },
   "bugs": {
-    "url": "https://gitlab.com/yocto-node-modules/yocto-logger/issues"
+    "url": "https://github.com/yoctore/yocto-logger/issues"
   },
   "license": "Apache-2.0",
   "engines": {
