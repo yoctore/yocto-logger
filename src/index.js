@@ -415,7 +415,7 @@ Logger.prototype.addDailyRotateTransport = function (fullpath, filename, options
       // Is directory ?
       if (!stats || !stats.isDirectory()) {
         message = [ '[ Logger.addDailyRotateTransport ] - Directory path : [',
-                    fullpath, '] is invalid. Operation aborted !' ].join(' ');
+                    fullpath, '] is invalid.', err, 'Operation aborted !' ].join(' ');
 
         // log message
         this.error(message);
