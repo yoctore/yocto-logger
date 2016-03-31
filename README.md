@@ -1,3 +1,5 @@
+[![NPM](https://nodei.co/npm/yocto-logger.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/yocto-logger/)
+
 ![alt text](https://david-dm.org/yoctore/yocto-logger.svg "Dependencies Status")
 [![Code Climate](https://codeclimate.com/github/yoctore/yocto-logger/badges/gpa.svg)](https://codeclimate.com/github/yoctore/yocto-logger)
 [![Test Coverage](https://codeclimate.com/github/yoctore/yocto-logger/badges/coverage.svg)](https://codeclimate.com/github/yoctore/yocto-logger/coverage)
@@ -144,7 +146,7 @@ For example if we need to set current logger instance to `error` level :
 ```javascript
 var logger = require('yocto-logger');
 
-logger.setLogLevel('error);
+logger.setLogLevel('error');
 // YOUR Extra code here
 ```
 
