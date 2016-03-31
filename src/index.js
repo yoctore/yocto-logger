@@ -1,15 +1,3 @@
-/**
- * This module is a part of yocto modules for NodeJS.
- *
- * Please see https://www.npmjs.com/~yocto for complete list of available module (completed day after day).
- *
- * This module manage your own logger request on your node app.
- *
- * This module his based on winston package : https://github.com/flatiron/winston
- *
- * @author Mathieu ROBERT <mathieu@yocto.re>
- * @copyright 2015 Yocto SAS, All right reserved <http://www.yocto.re>
- */
 'use strict';
 
 var winston       = require('winston');
@@ -21,6 +9,7 @@ var uuid          = require('uuid');
 var fs            = require('fs');
 var path          = require('path');
 var Promise       = require('promise');
+var rotate        = require('winston-daily-rotate-file');
 
 // Must extend String.prottype for use format to a method mode
 format.extend(String.prototype);
@@ -167,7 +156,8 @@ function Logger () {
    * @private
    */
   var timestampFormatter = function () {
-    return moment().format('YYYY/MM/DD HH:mm:ss'); // test
+    // default statement
+    return moment().format('YYYY/MM/DD HH:mm:ss');
   };
 
   /**
@@ -219,6 +209,7 @@ function Logger () {
 
     // Check and return a correct value
     if (index >= 0) {
+      // get first item
       return _.first(_.values(rules[index]));
     }
 
@@ -234,6 +225,7 @@ function Logger () {
    * @public
    */
   this.consoleTransportFormatter = function (options) {
+    // default statement
     return transportFormatter(options, true);
   };
 
@@ -246,6 +238,7 @@ function Logger () {
    * @return {String} the correct string to use on current transporter
    */
   this.dailyRotateFileTransportFormatter = function (options) {
+    // default statement
     return transportFormatter(options, false);
   };
 
@@ -309,6 +302,7 @@ function Logger () {
 Logger.prototype.enableConsole = function (status) {
   // Has a valid status
   status      = _.isBoolean(status) ? status : true;
+  // define correct function
   var fnName  = status ? 'enableConsole' : 'disableConsole';
 
   // Check instance existence ??
@@ -410,9 +404,6 @@ Logger.prototype.addDailyRotateTransport = function (fullpath, filename, options
   fullpath = path.normalize(fullpath);
   fullpath = path.resolve(fullpath);
 
-  // Save current context
-  var context = this;
-
   // default message data for event dispatch
   var message;
 
@@ -427,7 +418,7 @@ Logger.prototype.addDailyRotateTransport = function (fullpath, filename, options
                     fullpath, '] is invalid. Operation aborted !' ].join(' ');
 
         // log message
-        context.error(message);
+        this.error(message);
 
         // failed so reject
         reject(message);
@@ -440,13 +431,13 @@ Logger.prototype.addDailyRotateTransport = function (fullpath, filename, options
                         fullpath, ' - operation aborted !' ].join(' ');
 
             // log message
-            context.error(message);
+            this.error(message);
 
             // failed so reject
             reject(message);
           } else {
             // Build object configuration
-            var daily = _.clone(context.defaultDailyRotateTransportFile);
+            var daily = _.clone(this.defaultDailyRotateTransportFile);
 
             // Extend daily
             _.extend(daily, { dirname : fullpath });
@@ -463,7 +454,7 @@ Logger.prototype.addDailyRotateTransport = function (fullpath, filename, options
               if (_.isString(filename) && !_.isEmpty(filename)) {
                 _.extend(daily, { filename : filename });
               } else {
-                context.warning([
+                this.warning([
                   '[ Logger.addDailyRotateTransport ] -',
                   'filename is not a string. restore filename to',
                   daily.filename
@@ -472,20 +463,20 @@ Logger.prototype.addDailyRotateTransport = function (fullpath, filename, options
             }
 
             // Winston is available ??
-            if (!_.isUndefined(context.winston)) {
+            if (!_.isUndefined(this.winston)) {
               // Transport already exists ?
-              if (_.has(context.winston.transports, daily.name)) {
-                context.warning([
+              if (_.has(this.winston.transports, daily.name)) {
+                this.warning([
                   '[ Logger.addDailyRotateTransport ] - A transport with the name',
                   daily.name,
                   'already exists. Removing current before adding new transport'
                 ].join(' '));
 
-                context.winston.remove(daily.name);
+                this.winston.remove(daily.name);
               }
 
               // Add new
-              context.winston.add(winston.transports.File, daily);
+              this.winston.add(rotate, daily);
 
               // Build name for logging message
               filename = [
@@ -497,7 +488,7 @@ Logger.prototype.addDailyRotateTransport = function (fullpath, filename, options
               ].join('');
 
               // Log
-              context.info([
+              this.info([
                 '[ Logger.addDailyRotateTransport ] - Success ! Datas are logged in',
                 filename
               ].join(' '));
@@ -509,16 +500,16 @@ Logger.prototype.addDailyRotateTransport = function (fullpath, filename, options
                           'Cannot add new transport. instance is invalid' ].join(' ');
 
               // log message
-              context.error(message);
+              this.error(message);
 
               // Emit failure event
               reject(message);
             }
           }
-        });
+        }.bind(this));
       }
-    });
-  });
+    }.bind(this));
+  }.bind(this));
 };
 
 /**

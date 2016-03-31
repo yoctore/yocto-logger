@@ -1,6 +1,5 @@
 var logger = require("../src");
 
-
 logger.setLogLevel('info');
 logger.banner("Adding new default transport with handle success & failure");
 logger.verbose('TEST verbose');

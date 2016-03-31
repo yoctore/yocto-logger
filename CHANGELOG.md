@@ -1,3 +1,9 @@
+## 1.1.4 (2016-03-31)
+
+- Change context usage
+- change dailyrotate usage
+- Test codeclimate config
+
 ## 1.1.1 (2015-11-03)
 
 - Update package version.
