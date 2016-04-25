@@ -595,7 +595,7 @@ Logger.prototype.changeLevel = function (o, n, isless) {
       // parse all transport
       _.each(this.winston.transports, function (transport) {
         if (_.has(transport, 'level')) {
-          transport.level = levels[this.logLevel - 1].name;
+          transport.level = levels[this.logLevel - 1].fn;
         }
       }, this);
 
@@ -636,6 +636,7 @@ Logger.prototype.setLogLevel = function (name) {
 
   // search data
   var current   = _.find(levels, 'level', this.logLevel);
+
   // search data
   var searched  = _.find(levels, 'name', name);
 

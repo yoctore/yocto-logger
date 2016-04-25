@@ -1,6 +1,6 @@
 var logger = require("../src");
 
-logger.setLogLevel('info');
+logger.setLogLevel('debug');
 logger.banner("Adding new default transport with handle success & failure");
 logger.verbose('TEST verbose');
 logger.debug('test debug');
@@ -19,7 +19,7 @@ logger.less();
 // chaining
 logger.more().more().more();
 logger.addDailyRotateTransport().then(function(success) {
-  logger.disableConsole();
+  //logger.disableConsole();
   logger.info("logging a string a");
   logger.banner("Adding new default transport - Test directory");
   logger.enableConsole();
