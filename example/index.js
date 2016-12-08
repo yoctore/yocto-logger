@@ -2,7 +2,9 @@ var logger = require("../src");
 
 logger.setLogLevel('debug');
 logger.banner("Adding new default transport with handle success & failure");
+
 logger.verbose('TEST verbose');
+logger.error('TEST verbosevdvd');
 logger.debug('test debug');
 logger.info('test info');
 logger.warning('test warning');
@@ -16,18 +18,21 @@ logger.less();
 logger.verbose('ccc');
 logger.info('ccc');
 logger.less();
+
 // chaining
 logger.more().more().more();
-logger.addDailyRotateTransport().then(function(success) {
+logger.addDailyRotateTransport(null, 'test.log', { name : 'test' }).then(function(success) {
+  //console.log(success);
   //logger.disableConsole();
-  logger.info("logging a string a");
+  logger.info("logging a string a", {} , 'test');
   logger.banner("Adding new default transport - Test directory");
   logger.enableConsole();
-  logger.info("logging a string b");
-  logger.disableExceptions(); 
+  logger.info("logging a string b", {}, 'test');
+  logger.setLogLevel('error', 'test');
+  logger.disableExceptions('default-daily-rotate-transport'); 
   logger.enableExceptions();
 }, function(error) {
-  console.log(error);
+  //console.log(error);
 });
 logger.disableConsole();
 logger.banner("Adding new default transport - Test directory");
@@ -50,4 +55,4 @@ logger.debug("meta data debug",{mymeta:"debug"});
 logger.warning("meta data warning",{mymeta:"warning"});
 logger.error("meta data error",{mymeta:"error"});
 logger.banner("Banner customized",{color:"red",bgColor:"white"});
-logger.banner("Banner customized with invalid color",{color:"red",bgColor:"myColor"}); 
+logger.banner("Banner customized with invalid color",{color:"red",bgColor:"myColor"});

@@ -12,13 +12,15 @@
 
 This module is a part of yocto node modules for NodeJS. 
 
-Please see https://www.npmjs.com/~yocto for complete list of available module (completed day after day).
+Please see [https://www.npmjs.com/~yocto](https://www.npmjs.com/~yocto) for complete list of available module (completed day after day).
 
 This module manage your own logger request on your node app.
 
-This module his based on winston package : https://github.com/flatiron/winston
+This module his based on [winston](https://www.npmjs.com/package/winston) package.
 
 **IMPORTANT : This module is not a complete reimplantation of winston** we only use winston for the core process.
+
+**IMPORTANT : This module shared logger by default in next major release group logger will be add**
 
 ## Motivation
 

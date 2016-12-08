@@ -1,3 +1,12 @@
+## 2.0.0 (2017-07-12)
+
+- Major update of all dependencies
+- Add new parameters to focus a specific transporter for logging and other configuration methods if needed
+- Update node version engine to >= 4.6.1
+- Add unit tests
+- Clean some part of code
+- Add silly level
+
 ## 1.1.4 (2016-03-31)
 
 - Change context usage
