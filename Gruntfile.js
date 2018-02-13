@@ -1,57 +1,65 @@
 'use strict';
 
 module.exports = function (grunt) {
-  // init config
+  // Init config
   grunt.initConfig({
-    // default package
-    pkg       : grunt.file.readJSON('package.json'),
+    // Default package
+    pkg : grunt.file.readJSON('package.json'),
 
-    // hint our app
+    // Hint our app
     yoctohint : {
-      options  : {},
-      all      : [ 'src/index.js', 'Gruntfile.js' ]
-    },
-
-    // Uglify our app
-    uglify    : {
+      json : [
+        'package.json'
+      ],
+      node : [
+        'src/index.js', 'Gruntfile.js'
+      ],
       options : {
-        banner  : '/* <%= pkg.name %> - <%= pkg.description %> - V<%= pkg.version %> */\n'
-      },
-      api     : {
-        src    : 'src/index.js',
-        dest   : 'dist/index.js'
+        compatibility : true
       }
     },
 
-    // test our app
-    mochacli  : {
+    // Uglify our app
+    uglify : {
       options : {
-        'reporter'       : 'spec',
-        'inline-diffs'   : false,
-        'no-exit'        : true,
-        'force'          : false,
-        'check-leaks'    : true,
-        'bail'           : false
+        banner : '/* <%= pkg.name %> - <%= pkg.description %> - V<%= pkg.version %> */\n'
       },
-      all     : [ 'test/*.js' ]
+      api : {
+        src  : 'src/index.js',
+        dest : 'dist/index.js'
+      }
     },
-    yoctodoc  : {
+
+    // Test our app
+    mochacli : {
       options : {
-        // change your path destination
-        destination     : './docs'
+        reporter       : 'spec',
+        'inline-diffs' : false,
+        'no-exit'      : true,
+        force          : false,
+        'check-leaks'  : true,
+        bail           : false
       },
+      all : [ 'test/*.js' ]
+    },
+    yoctodoc : {
+      options : {
+        // Change your path destination
+        destination : './docs'
+      },
+
       // Set all your file here
-      all     : [ 'src/*.js' ]
+      all : [ 'src/*.js' ]
     }
   });
 
-  // load tasks
+  // Load tasks
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-mocha-cli');
   grunt.loadNpmTasks('yocto-hint');
   grunt.loadNpmTasks('yocto-doc');
 
-  // register tasks
+  // Register tasks
   grunt.registerTask('hint', [ 'yoctohint' ]);
   grunt.registerTask('test', 'mochacli');
   grunt.registerTask('build', [ 'yoctohint', 'uglify' ]);

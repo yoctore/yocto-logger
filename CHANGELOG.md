@@ -1,6 +1,11 @@
 ## 2.0.0 (2017-07-12)
 
 - Major update of all dependencies
+- Update node version engine to >= 8.9.4
+
+## 2.0.0 (2017-07-12)
+
+- Major update of all dependencies
 - Add new parameters to focus a specific transporter for logging and other configuration methods if needed
 - Update node version engine to >= 4.6.1
 - Add unit tests
