@@ -15,7 +15,7 @@ var rotate        = require('winston-daily-rotate-file');
 format.extend(String.prototype);
 
 // Allow to display errors
-winston.emitErrs  = false;
+winston.emitErrs = false;
 
 /**
  * Yocto logger manager. Manage your own logger request
@@ -54,7 +54,11 @@ function Logger () {
    * @default { name : 'error', level : 0, fn : 'error' }
    * @const
    */
-  this.ERROR_LOG_LEVEL      = { name : 'error', level : 0, fn : 'error' };
+  this.ERROR_LOG_LEVEL = {
+    name  : 'error',
+    level : 0,
+    fn    : 'error'
+  };
 
   /**
    * @memberof Logger
@@ -62,7 +66,11 @@ function Logger () {
    * @default { name : 'warning', level : 1, fn : 'warn' }
    * @const
    */
-  this.WARNING_LOG_LEVEL    = { name : 'warning', level : 1, fn : 'warn' };
+  this.WARNING_LOG_LEVEL = {
+    name  : 'warning',
+    level : 1,
+    fn    : 'warn'
+  };
 
   /**
    * @memberof Logger
@@ -70,7 +78,11 @@ function Logger () {
    * @default { name : 'info',    level : 2, fn : 'info' }
    * @const
    */
-  this.INFO_LOG_LEVEL       = { name : 'info',    level : 2, fn : 'info' };
+  this.INFO_LOG_LEVEL = {
+    name  : 'info',
+    level : 2,
+    fn    : 'info'
+  };
 
   /**
    * @memberof Logger
@@ -78,7 +90,11 @@ function Logger () {
    * @default { name : 'verbose', level : 3, fn : 'verbose' }
    * @const
    */
-  this.VERBOSE_LOG_LEVEL    = { name : 'verbose', level : 3, fn : 'verbose' };
+  this.VERBOSE_LOG_LEVEL = {
+    name  : 'verbose',
+    level : 3,
+    fn    : 'verbose'
+  };
 
   /**
    * @memberof Logger
@@ -86,7 +102,11 @@ function Logger () {
    * @default { name : 'debug',   level : 4, fn : 'debug' }
    * @const
    */
-  this.DEBUG_LOG_LEVEL      = { name : 'debug',   level : 4, fn : 'debug' };
+  this.DEBUG_LOG_LEVEL = {
+    name  : 'debug',
+    level : 4,
+    fn    : 'debug'
+  };
 
   /**
    * @memberof Logger
@@ -94,7 +114,11 @@ function Logger () {
    * @default { name : 'debug',   level : 5, fn : 'debug' }
    * @const
    */
-  this.SILLY_LOG_LEVEL      = { name : 'silly',   level : 5, fn : 'silly' };
+  this.SILLY_LOG_LEVEL = {
+    name  : 'silly',
+    level : 5,
+    fn    : 'silly'
+  };
 
   /**
    * Default formatter. use all data to render the correct message format to the logger formatter
@@ -110,25 +134,36 @@ function Logger () {
     // Setting up the colorize flag
     colorize = colorize || false;
 
+    // Define date to use
+    var date = null;
+
+    // Check is function
+    if (_.isFunction(options.timestamp)) {
+      // Set fn
+      date = options.timestamp();
+    } else if (!_.isNull(options.timestamp)) {
+      // Use moment
+      date = moment().format();
+    }
+
+
     // Build data to log
     var dataToLog = {
       level   : options.level,
-      date    : _.isFunction(options.timestamp) ?
-                options.timestamp() :
-                (_.isNull(options.timestamp) ?
-                null :
-                moment().format()),
-      message : (!_.isUndefined(options.message) && !_.isEmpty(options.message) ?
-                options.message : ''),
-      meta    : (!_.isUndefined(options.meta) && Object.keys(options.meta).length ?
-                JSON.stringify(options.meta) : ''),
+      date    : date,
+      message : !_.isUndefined(options.message) && !_.isEmpty(options.message) ?
+        options.message : '',
+      meta : !_.isUndefined(options.meta) && Object.keys(options.meta).length ?
+        JSON.stringify(options.meta) : ''
     };
-    // has label property
+
+    // Has label property
+
     if (_.has(options, 'label') && _.isFunction(options.label)) {
       dataToLog.level = options.label(options.level.toUpperCase());
     }
 
-    // has options timestamp
+    // Has options timestamp
     if (_.has(options, 'timestamp') && _.isFunction(options.timestamp)) {
       dataToLog.date = options.timestamp();
     }
@@ -138,16 +173,17 @@ function Logger () {
       if (_.has(options, 'colorize') && _.isFunction(options.colorize)) {
         // Prepare value to use on logger
         colorize = options.colorize(options.level);
-        // set level
+
+        // Set level
         dataToLog.level = chalk[colorize]('[{}]'.format(
-                            options.label(options.level.toUpperCase(), 4, ' '), 3, ' '));
+          options.label(options.level.toUpperCase(), 4, ' '), 3, ' '));
       }
     }
 
     // Default format
     var dformat  = '{level}';
 
-    // date is not null ?
+    // Date is not null ?
     if (!_.isNull(dataToLog.date)) {
       dformat = [ '[{date}]', dformat ].join(' ');
     }
@@ -175,7 +211,7 @@ function Logger () {
    * @return {String} formated string based on moment.js format
    */
   var timestampFormatter = function () {
-    // default statement
+    // Default statement
     return moment().format('YYYY/MM/DD HH:mm:ss');
   };
 
@@ -190,12 +226,24 @@ function Logger () {
    */
   var labelFormatter =  function (value) {
     var rules = [
-      { info      : 'info    ' },
-      { warn      : 'warning ' },
-      { error     : 'error   ' },
-      { debug     : 'debug   ' },
-      { verbose   : 'verbose ' },
-      { silly     : 'silly' }
+      {
+        info : 'info    '
+      },
+      {
+        warn : 'warning '
+      },
+      {
+        error : 'error   '
+      },
+      {
+        debug : 'debug   '
+      },
+      {
+        verbose : 'verbose '
+      },
+      {
+        silly : 'silly'
+      }
     ];
 
     // Get index
@@ -221,12 +269,24 @@ function Logger () {
    */
   var colorizeFormatter  = function (level) {
     var rules = [
-      { info     : 'green' },
-      { warn     : 'yellow' },
-      { error    : 'red' },
-      { debug    : 'blue' },
-      { verbose  : 'white' },
-      { silly    : 'magenta' }
+      {
+        info : 'green'
+      },
+      {
+        warn : 'yellow'
+      },
+      {
+        error : 'red'
+      },
+      {
+        debug : 'blue'
+      },
+      {
+        verbose : 'white'
+      },
+      {
+        silly : 'magenta'
+      }
     ];
 
     // Get index
@@ -234,7 +294,7 @@ function Logger () {
 
     // Check and return a correct value
     if (index >= 0) {
-      // get first item
+      // Get first item
       return _.first(_.values(rules[index]));
     }
 
@@ -252,7 +312,7 @@ function Logger () {
    * @return {String} the correct string to use on current transporter
    */
   this.consoleTransportFormatter = function (options) {
-    // default statement
+    // Default statement
     return transportFormatter(options, true);
   };
 
@@ -266,7 +326,7 @@ function Logger () {
    * @return {String} the correct string to use on current transporter
    */
   this.dailyRotateFileTransportFormatter = function (options) {
-    // default statement
+    // Default statement
     return transportFormatter(options, false);
   };
 
@@ -321,9 +381,9 @@ function Logger () {
    * @memberof Logger
    * @member {Instance} winston
    */
-  this.winston = new (winston.Logger)({
-    transports  : [
-      new (winston.transports.Console)(_.clone(this.defaultConsoleTransport))
+  this.winston = new winston.Logger({
+    transports : [
+      new winston.transports.Console(_.clone(this.defaultConsoleTransport))
     ],
     exitOnError : false
   });
@@ -337,8 +397,9 @@ function Logger () {
  */
 Logger.prototype.enableConsole = function (status) {
   // Has a valid status
-  status      = _.isBoolean(status) ? status : true;
-  // define correct function
+  status = _.isBoolean(status) ? status : true;
+
+  // Define correct function
   var fnName  = status ? 'enableConsole' : 'disableConsole';
 
   // Check instance existence ??
@@ -346,10 +407,8 @@ Logger.prototype.enableConsole = function (status) {
       _.isObject(this.winston.transports)) {
     // Requirements check
     if (_.has(this.winston.transports, 'console')) {
-
       // Has property silent ?
       if (_.has(this.winston.transports.console, 'silent')) {
-
         // Disabled
         this.winston.transports.console.silent = !status;
 
@@ -358,15 +417,17 @@ Logger.prototype.enableConsole = function (status) {
           // Log enable message if enable failed message will be appear on dailyrotate if set
           this.info([ '[ Logger.', fnName, ' ] - enable console on current logger' ].join(''));
         }
-        // return a valid statement
+
+        // Return a valid statement
         return true;
       }
     }
   } else {
-    // default log
+    // Default log
     console.log(chalk.red([ '[ Logger.', fnName, ' ] - winston doesn\'t exists.' ].join('')));
   }
-  // default statement
+
+  // Default statement
   return false;
 };
 
@@ -392,10 +453,13 @@ Logger.prototype.disableConsole = function () {
  */
 Logger.prototype.enableExceptions = function (status, transportName) {
   // Has a valid status
-  status      = _.isBoolean(status) ? status : true;
-  // default name
+  status = _.isBoolean(status) ? status : true;
+
+  // Default name
   var fnName  = status ? 'enableExceptions' : 'disableExceptions';
-  // only if is enable status
+
+  // Only if is enable status
+
   if (status) {
     // Log
     this.info('[ Logger.enableExceptions ] - Try to enable exceptions on logger');
@@ -404,9 +468,11 @@ Logger.prototype.enableExceptions = function (status, transportName) {
   // Check instance existence ??
   if (!_.isUndefined(this.winston.transports) || !_.isNull(this.winston.transports) &&
       _.isObject(this.winston.transports)) {
-    // get all keys transports
+    // Get all keys transports
     var transports = Object.keys(this.winston.transports);
-    // get correct transports items
+
+    // Get correct transports items
+
     transports = _.isString(transportName) && !_.isEmpty(transportName) ?
       _.filter(transports, function (transport) {
         return transport === transportName;
@@ -414,7 +480,7 @@ Logger.prototype.enableExceptions = function (status, transportName) {
 
     // Parse each element before disable exceptions
     _.each(transports, function (key) {
-      // log message
+      // Log message
       this.info([
         '[ Logger.',
         fnName,
@@ -423,15 +489,18 @@ Logger.prototype.enableExceptions = function (status, transportName) {
         ' for transport ',
         key
       ].join(''));
-      // change item status
+
+      // Change item status
       this.winston.transports[key].handleExceptions = !status;
-      // return valid statement
+
+      // Return valid statement
       return true;
     }.bind(this));
   } else {
     console.log(chalk.red([ '[ Logger.', fnName, ' ] - winston doesn\t exists.' ].join('')));
   }
-  // default statement
+
+  // Default statement
   return false;
 };
 
@@ -461,7 +530,8 @@ Logger.prototype.addDailyRotateTransport = function (fullpath, filename, options
   // Path is valid type ? transform to default value if not
   if (_.isUndefined(fullpath) || !_.isString(fullpath) || _.isNull(fullpath)) {
     fullpath = './';
-    // warning message
+
+    // Warning message
     this.warning(
       '[ Logger.addDailyRotateTransport ] - Invalid path given. Using default path \'./\''
     );
@@ -471,43 +541,44 @@ Logger.prototype.addDailyRotateTransport = function (fullpath, filename, options
   fullpath = path.normalize(fullpath);
   fullpath = path.resolve(fullpath);
 
-  // default message data for event dispatch
+  // Default message data for event dispatch
   var message;
 
-  // return promise statement
+  // Return promise statement
   return new Promise(function (fulfill, reject) {
     // Check file
     fs.lstat(fullpath, function (err, stats) {
-
       // Is directory ?
       if (!stats || !stats.isDirectory()) {
         message = [ '[ Logger.addDailyRotateTransport ] - Directory path : [',
-                    fullpath, '] is invalid.', err, 'Operation aborted !' ].join(' ');
+          fullpath, '] is invalid.', err, 'Operation aborted !' ].join(' ');
 
-        // log message
+        // Log message
         this.error(message);
 
-        // failed so reject
+        // Failed so reject
         reject(message);
       } else {
         // Check permission
-        fs.access(fullpath, fs.F_OK | fs.R_OK | fs.W_OK, function (err) {
+        fs.access(fullpath, fs.F_OK || fs.R_OK || fs.W_OK, function (err) {
           // Can read / write ???
           if (err) {
             message = [ '[ Logger.addDailyRotateTransport ] - Cannot read and write on',
-                        fullpath, ' - operation aborted !' ].join(' ');
+              fullpath, ' - operation aborted !' ].join(' ');
 
-            // log message
+            // Log message
             this.error(message);
 
-            // failed so reject
+            // Failed so reject
             reject(message);
           } else {
             // Build object configuration
             var daily = _.clone(this.defaultDailyRotateTransportFile);
 
             // Extend daily
-            _.extend(daily, { dirname : fullpath });
+            _.extend(daily, {
+              dirname : fullpath
+            });
 
             // Is a valid options ?
             if (!_.isUndefined(options) && !_.isNull(options) && _.isObject(options)) {
@@ -516,11 +587,12 @@ Logger.prototype.addDailyRotateTransport = function (fullpath, filename, options
 
             // Check if file is specified
             if (!_.isUndefined(filename) && !_.isEmpty(filename) && !_.isNull(filename)) {
-
               // Is a valid file name
               if (_.isString(filename) && !_.isEmpty(filename)) {
-                // process default extend
-                _.extend(daily, { filename : filename });
+                // Process default extend
+                _.extend(daily, {
+                  filename : filename
+                });
               } else {
                 this.warning([
                   '[ Logger.addDailyRotateTransport ] -',
@@ -539,7 +611,8 @@ Logger.prototype.addDailyRotateTransport = function (fullpath, filename, options
                   daily.name,
                   'already exists. Removing current before adding new transport'
                 ].join(' '));
-                // remove existing
+
+                // Remove existing
                 this.winston.remove(daily.name);
               }
 
@@ -561,18 +634,20 @@ Logger.prototype.addDailyRotateTransport = function (fullpath, filename, options
                 filename
               ].join(' '));
 
-              // change transport default property
-              this.winston.transports[daily.name].isDefault = !_.isUndefined(options) &&
+              // Change transport default property
+              this.winston.transports[daily.name].isDefault = !(!_.isUndefined(options) &&
                 _.isString(options.name) && !_.isEmpty(options.name) &&
-                  options.name !== this.defaultDailyRotateTransportFile.name ? false : true;
+                  options.name !== this.defaultDailyRotateTransportFile.name);
 
               // Emit sucess event
               fulfill(_.get(this.winston.transports, daily.name));
             } else {
               message = [ '[ Logger.addDailyRotateTransport ] -',
-                          'Cannot add new transport. instance is invalid' ].join(' ');
-              // log message
+                'Cannot add new transport. instance is invalid' ].join(' ');
+
+              // Log message
               this.error(message);
+
               // Emit failure event
               reject(message);
             }
@@ -594,41 +669,43 @@ Logger.prototype.addDailyRotateTransport = function (fullpath, filename, options
  * @return {Boolean|EventEmitter} false in case of error an event eventEmitter in case of success
  */
 Logger.prototype.process = function (level, message, meta, transportName) {
-  // default try/catch process
+  // Default try/catch process
   try {
     // Check instance before process
     if (!_.isUndefined(this.winston) && !_.isNull(this.winston)) {
       // Has function ?
       if (_.has(level, 'fn')) {
-        // default transport
+        // Default transport
         var transport   = this.winston;
-        // parse all transports
+
+        // Parse all transports
         var transports  = this.winston.transports;
 
-        // a correct specific transport name is defined ?
+        // A correct specific transport name is defined ?
         if (_.isString(transportName) && !_.isEmpty(transportName) &&
           _.has(transports, transportName)) {
-          // change default transport
+          // Change default transport
           transport = _.get(transports, transportName);
         }
 
-        // default statement
+        // Default statement
         return !_.isUndefined(meta) ?
           transport.log(level.fn, message, meta) :
           transport.log(level.fn, message);
-      } else {
-        // Search function is undefined throw error
-        throw 'Fn function is undefined or null. cannot process log';
       }
+
+      // Search function is undefined throw error
+      throw 'Fn function is undefined or null. cannot process log';
     } else {
       // Winston is undefined throw error
       throw 'Cannot une winston logger. instance is undefined or null';
     }
   } catch (e) {
-    // default log
+    // Default log
     console.log(chalk.red([ '[ Logger.process ] -', e ].join(' ')));
   }
-  // default statement
+
+  // Default statement
   return false;
 };
 
@@ -677,29 +754,30 @@ Logger.prototype.changeLevel = function (o, n, isless, transportName) {
     // Winston is here
     if (!_.isUndefined(this.winston.transports) || !_.isNull(this.winston.transports) &&
         _.isObject(this.winston.transports)) {
-
-      // parse all transports
+      // Parse all transports
       var transports  = this.winston.transports;
 
-      // a correct specific transport name is defined ?
+      // A correct specific transport name is defined ?
       if (_.isString(transportName) && !_.isEmpty(transportName) &&
         _.has(transports, transportName)) {
-        // change default transport
+        // Change default transport
         transports = [ _.get(transports, transportName) ];
       }
-      // parse all transport
+
+      // Parse all transport
       _.each(transports, function (transport) {
-        // has level property
+        // Has level property
         if (_.has(transport, 'level')) {
-          // get level method for winston
+          // Get level method for winston
           transport.level = levels[this.logLevel].fn;
-          // info
+
+          // Info
           this.info([ '[ Logger.changeLevel ] - Level was changed to',
             levels[this.logLevel].name, 'for', transport.name ].join(' '));
         }
       }.bind(this));
     } else {
-      // error message
+      // Error message
       this.error('[ Logger.changeLevel ] - Cannot change level. Transport is not defined');
     }
   } else {
@@ -722,7 +800,6 @@ Logger.prototype.changeLevel = function (o, n, isless, transportName) {
  * @return {Boolean|Object} false if error occured otherwise current instance for chaining
  */
 Logger.prototype.setLogLevel = function (name, transportName) {
-
   // All error
   var levels = [
     this.ERROR_LOG_LEVEL,
@@ -733,25 +810,26 @@ Logger.prototype.setLogLevel = function (name, transportName) {
     this.SILLY_LOG_LEVEL
   ];
 
-  // search data
+  // Search data
   var current   = _.find(levels, [ 'level', this.logLevel ]);
 
-  // search data
+  // Search data
   var searched  = _.find(levels, [ 'name', name ]);
 
-  // value was founded ?
+  // Value was founded ?
   if (!_.isUndefined(searched) && _.has(searched, 'level') && _.isNumber(searched.level) &&
       !_.isUndefined(current) && _.has(current, 'level') && _.isNumber(current.level)) {
-    // assing value
+    // Assing value
     return this.changeLevel(this.logLevel, searched.level,
-      (current.level > searched.level), transportName);
-  } else {
-    // warning message
-    this.warning([ '[ Logger.setLogLevel ] - Cannot change log level manually.',
-                   'Given level [', name, '] was not founded.' ].join(' '));
+      current.level > searched.level, transportName);
   }
 
-  // default statement
+  // Warning message
+  this.warning([ '[ Logger.setLogLevel ] - Cannot change log level manually.',
+    'Given level [', name, '] was not founded.' ].join(' '));
+
+
+  // Default statement
   return false;
 };
 
@@ -762,13 +840,13 @@ Logger.prototype.setLogLevel = function (name, transportName) {
  * @return {Object} current instance for chaining
  */
 Logger.prototype.more = function (transportName) {
-
   // Getting default value for log changing
   var o = this.logLevel;
-  var n = o < 5 ? (o + 1) : o;
+  var n = o < 5 ? o + 1 : o;
 
   // Show what we process
   this.info('[ Logger.more ] - Requesting more logs');
+
   // Changing level and returning instance
   return this.changeLevel(o, n, false, transportName);
 };
@@ -782,10 +860,11 @@ Logger.prototype.more = function (transportName) {
 Logger.prototype.less = function (transportName) {
   // Getting default value for log changing
   var o = this.logLevel;
-  var n = o > 0 ? (o - 1) : o;
+  var n = o > 0 ? o - 1 : o;
 
   // Show what we process
   this.info('[ Logger.less ] - Requesting less logs');
+
   // Changing level and returning instance
   return this.changeLevel(o, n, true, transportName);
 };
@@ -799,7 +878,7 @@ Logger.prototype.less = function (transportName) {
  * @return {Boolean|EventEmitter} false in case of error an event eventEmitter in case of success
  */
 Logger.prototype.verbose = function (message, meta, transportName) {
-  // call main log process with verbose level
+  // Call main log process with verbose level
   return this.process(this.VERBOSE_LOG_LEVEL, message, meta, transportName);
 };
 
@@ -825,7 +904,7 @@ Logger.prototype.info = function (message, meta, transportName) {
  * @return {Boolean|EventEmitter} false in case of error an event eventEmitter in case of success
  */
 Logger.prototype.warning = function (message, meta, transportName) {
-  // call main log process with warning level
+  // Call main log process with warning level
   return this.process(this.WARNING_LOG_LEVEL, message, meta, transportName);
 };
 
@@ -838,7 +917,7 @@ Logger.prototype.warning = function (message, meta, transportName) {
  * @return {Boolean|EventEmitter} false in case of error an event eventEmitter in case of success
  */
 Logger.prototype.error = function (message, meta, transportName) {
-  // call main log process with error level
+  // Call main log process with error level
   return this.process(this.ERROR_LOG_LEVEL, message, meta, transportName);
 };
 
@@ -851,7 +930,7 @@ Logger.prototype.error = function (message, meta, transportName) {
  * @return {Boolean|EventEmitter} false in case of error an event eventEmitter in case of success
  */
 Logger.prototype.debug = function (message, meta, transportName) {
-  // call main log process with debug level
+  // Call main log process with debug level
   return this.process(this.DEBUG_LOG_LEVEL, message, meta, transportName);
 };
 
@@ -864,7 +943,7 @@ Logger.prototype.debug = function (message, meta, transportName) {
  * @return {Boolean|EventEmitter} false in case of error an event eventEmitter in case of success
  */
 Logger.prototype.silly = function (message, meta, transportName) {
-  // call main log process with debug level
+  // Call main log process with debug level
   return this.process(this.SILLY_LOG_LEVEL, message, meta, transportName);
 };
 
@@ -876,54 +955,51 @@ Logger.prototype.silly = function (message, meta, transportName) {
  * @return {Boolean} true when process is ok
  */
 Logger.prototype.banner = function (message, cstyle) {
-  // default style
+  // Default style
   var style = {
-    color     : 'white',
-    bgColor   : 'bgBlack',
-    tDelim    : '-',
-    bDelim    : '-',
-    lDelim    : '|',
-    rDelim    : '|'
+    color   : 'white',
+    bgColor : 'bgBlack',
+    tDelim  : '-',
+    bDelim  : '-',
+    lDelim  : '|',
+    rDelim  : '|'
   };
 
-  // has custom style options with color and bgColor rules
+  // Has custom style options with color and bgColor rules
   if (!_.isUndefined(cstyle) && _.has(cstyle, 'color') && _.has(cstyle, 'bgColor')) {
-
-    // bg rules start by correct Prefix ?
+    // Bg rules start by correct Prefix ?
     if (!_.startsWith('bg', cstyle.bgColor)) {
       cstyle.bgColor = [ 'bg',
         _.capitalize(cstyle.bgColor.toLowerCase())
       ].join('');
     }
 
-    // extend obj
+    // Extend obj
     _.extend(style, cstyle);
   }
 
-  // build end message
+  // Build end message
   var endmessage  = [ style.lDelim, message, style.rDelim ].join(' ');
 
-  // check properties
-  if (_.has(chalk.styles, style.color) && _.has(chalk.styles, style.bgColor)) {
-    // log full message
+  try {
     console.log(chalk[style.color][style.bgColor](_.repeat(style.tDelim, endmessage.length)));
     console.log(chalk[style.color][style.bgColor](endmessage));
     console.log(chalk[style.color][style.bgColor](_.repeat(style.bDelim, endmessage.length)));
-  } else {
+  } catch (error) {
     this.warning([
-      '[ Logger.Banner ] - Cannot use custom style given style is invalid.',
-      'Please read chalk documentation. Logging with current shell config.'
+      '[ Logger.Banner ] - error when write log : ' + error + ' . Logging with current shell value.'
     ].join(' '));
 
     console.log(_.repeat(style.tDelim, endmessage.length));
     console.log(endmessage);
     console.log(_.repeat(style.bDelim, endmessage.length));
   }
-  // default statement
+
+  // Default statement
   return true;
 };
 
 /**
  * Export current logger to use it on node
  */
-module.exports = new (Logger)();
+module.exports = new Logger();
