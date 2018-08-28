@@ -20,7 +20,7 @@ describe('Logger()', function() {
     it('create() method must return an instance of Logger', function() {
       // Ty to create a logger instance
       logger = logger.create();
-      //logger.disableConsole();
+      logger.disableConsole();
       // Tests
       expect(logger).to.be.an('Object').not.null;
     });
@@ -59,9 +59,9 @@ describe('Logger()', function() {
     });
   });
 
-
   // define log level
   var levels = [ 'emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug' ];
+  
   levels.forEach(function(level) {
     describe(`Levels method must log given content for levels ${level}`, function() {
 
@@ -71,6 +71,10 @@ describe('Logger()', function() {
         it(`Usage of data type ${typeof d} be succeed and return an object`, function() {
           expect(logger[level](d)).to.be.an('Object');
         });
+      });
+
+      it('Usage of meta must succeed and return an object', function() {
+        expect(logger[level]('test with meta data %s %d', 'mystring', 1000)).to.be.an('Object');
       });
     });
   });
@@ -93,7 +97,10 @@ describe('Logger()', function() {
     });
 
     it (`Combined daily rotate must create a file ${combinedName}`, function () {
-      expect(fs.existsSync([ destination, combinedName ].join('/'))).to.be.an('Boolean').equal(true);
+      var timeout = setTimeout(function() {
+        expect(fs.existsSync([ destination, combinedName ].join('/'))).to.be.an('Boolean').equal(true);
+        clearTimeout(timeout);
+      }, 2000);
     });
 
     it ('Combined daily rotate must create a audit file', function () {
@@ -117,7 +124,10 @@ describe('Logger()', function() {
     });
 
     it (`Error daily rotate must create a file ${combinedName}`, function () {
-      expect(fs.existsSync([ destination, combinedName ].join('/'))).to.be.an('Boolean').equal(true);
+      var timeout = setTimeout(function() {
+        expect(fs.existsSync([ destination, combinedName ].join('/'))).to.be.an('Boolean').equal(true);
+      clearTimeout(timeout);
+    }, 2000);
     });
 
     it ('Error daily rotate must create a audit file', function () {
@@ -141,7 +151,10 @@ describe('Logger()', function() {
     });
 
     it (`Request daily rotate must create a file ${combinedName}`, function () {
-      expect(fs.existsSync([ destination, combinedName ].join('/'))).to.be.an('Boolean').equal(true);
+      var timeout = setTimeout(function() {
+        expect(fs.existsSync([ destination, combinedName ].join('/'))).to.be.an('Boolean').equal(true);
+        clearTimeout(timeout);
+      }, 2000);
     });
 
     it ('Request daily rotate must create a audit file', function () {
