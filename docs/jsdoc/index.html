@@ -202,7 +202,16 @@ logger = logger.create(); // Use it
 
 // Others method
 logger.enableConsole();
-logger.disableConsole();</code></pre>
+logger.disableConsole();</code></pre><h3>Breaking Changes</h3><p>The v4.0.0 was completely rewrite in ES6. Please read documentation before use the v4.0.0</p>
+<h4>Changes</h4><ul>
+<li>Create logger from <code>require('yocto-logger')</code> is deprecated. Use this code instead :</li>
+</ul>
+<pre class="prettyprint source lang-javascript"><code>var logger = require('yocto-logger');
+// Create your own logger here
+logger = logger.create(); // Use it</code></pre><ul>
+<li>Levels was changes to syslog levels so refer to new method for log.</li>
+<li>All previous usage of daily rotate method is not working. Refer to new documentation.</li>
+</ul>
     </article>
   </section>
 
@@ -214,7 +223,7 @@ logger.disableConsole();</code></pre>
 
   <br class="clear">
 
-  <footer>Documentation for application <b>yocto-logger<b>.<br/>Generated at Tue Aug 28 2018 15:22:04 GMT+0400 (+04) with <a href='https://www.npmjs.com/package/yoctodoc'>yocto-doc</a><br/>Copyright Yocto © 2014 - 2018</footer>
+  <footer>Documentation for application <b>yocto-logger<b>.<br/>Generated at Tue Aug 28 2018 15:40:59 GMT+0400 (+04) with <a href='https://www.npmjs.com/package/yoctodoc'>yocto-doc</a><br/>Copyright Yocto © 2014 - 2018</footer>
 
   <script src="scripts/linenumber.js"></script>
   <script src="scripts/pagelocation.js"></script>

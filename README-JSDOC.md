@@ -190,3 +190,20 @@ logger = logger.create(); // Use it
 logger.enableConsole();
 logger.disableConsole();
 ```
+
+### Breaking Changes
+
+The v4.0.0 was completely rewrite in ES6. Please read documentation before use the v4.0.0
+
+#### Changes
+
+- Create logger from <code>require('yocto-logger')</code> is deprecated. Use this code instead :
+
+```javascript
+var logger = require('yocto-logger');
+// Create your own logger here
+logger = logger.create(); // Use it
+```
+
+- Levels was changes to syslog levels so refer to new method for log.
+- All previous usage of daily rotate method is not working. Refer to new documentation.
