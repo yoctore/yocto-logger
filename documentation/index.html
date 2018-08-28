@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>
+      Home - Documentation
+  </title>
+
+  <link href="https://www.braintreepayments.com/images/favicon-ccda0b14.png" rel="icon" type="image/png">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+  <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+  <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+
+  
+
+  
+  <script type="text/javascript" src="scripts/lodash.min.js"></script>
+  <script type="text/javascript" src="scripts/search.js"></script>
+  <link type="text/css" rel="stylesheet" href="styles/custom.css"/>
+</head>
+
+<body>
+  <svg style="display: none;">
+    <defs>
+      <symbol id="linkIcon" fill="#706d77" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 0h24v24H0z" fill="none"/>
+          <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+  <label for="nav-trigger" class="navicon-button x">
+    <div class="navicon"></div>
+  </label>
+
+  <label for="nav-trigger" class="overlay"></label>
+
+  <div class="top-nav-wrapper">
+    <ul>
+      <li  class="active" >
+        <a href="index.html">
+          
+          
+            <svg fill="#0095dd" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+              <path d="M0 0h24v24H0z" fill="none"/>
+            </svg>
+          
+        </a>
+      </li>
+
+      
+
+    </ul>
+  </div>
+
+  <nav>
+    <h3 class="reference-title">
+      yocto-logger<br/>Version <span style='color:#0095dd'>v3.0.0</span>
+    </h3>
+
+    <h3>Classes</h3><ul><li id="Logger-nav"><a href="Logger.html">Logger</a><ul class='methods'><li data-type="method" id="Logger-create-nav"><a href="Logger.html#.create">create</a></li><li data-type="method" id="Logger-accessRequestToDailyRotateFiles-nav"><a href="Logger.html#accessRequestToDailyRotateFiles">accessRequestToDailyRotateFiles</a></li><li data-type="method" id="Logger-addDailyRotateTransport-nav"><a href="Logger.html#addDailyRotateTransport">addDailyRotateTransport</a></li><li data-type="method" id="Logger-alert-nav"><a href="Logger.html#alert">alert</a></li><li data-type="method" id="Logger-banner-nav"><a href="Logger.html#banner">banner</a></li><li data-type="method" id="Logger-changeLogLevel-nav"><a href="Logger.html#changeLogLevel">changeLogLevel</a></li><li data-type="method" id="Logger-critical-nav"><a href="Logger.html#critical">critical</a></li><li data-type="method" id="Logger-debug-nav"><a href="Logger.html#debug">debug</a></li><li data-type="method" id="Logger-disableConsole-nav"><a href="Logger.html#disableConsole">disableConsole</a></li><li data-type="method" id="Logger-emergency-nav"><a href="Logger.html#emergency">emergency</a></li><li data-type="method" id="Logger-enableConsole-nav"><a href="Logger.html#enableConsole">enableConsole</a></li><li data-type="method" id="Logger-error-nav"><a href="Logger.html#error">error</a></li><li data-type="method" id="Logger-errorToDailyRotateFiles-nav"><a href="Logger.html#errorToDailyRotateFiles">errorToDailyRotateFiles</a></li><li data-type="method" id="Logger-info-nav"><a href="Logger.html#info">info</a></li><li data-type="method" id="Logger-notice-nav"><a href="Logger.html#notice">notice</a></li><li data-type="method" id="Logger-process-nav"><a href="Logger.html#process">process</a></li><li data-type="method" id="Logger-warning-nav"><a href="Logger.html#warning">warning</a></li></ul></li></ul>
+  </nav>
+
+  <div id="main">
+    
+
+    
+      
+
+
+
+    
+
+      
+
+
+  <section class="readme">
+    <article>
+      <p><a href="https://nodei.co/npm/yocto-logger/"><img src="https://nodei.co/npm/yocto-logger.png?downloads=true&amp;downloadRank=true&amp;stars=true" alt="NPM"></a></p>
+<p><img src="https://david-dm.org/yoctore/yocto-logger.svg" alt="alt text" title="Dependencies Status">
+<a href="https://codeclimate.com/github/yoctore/yocto-logger"><img src="https://codeclimate.com/github/yoctore/yocto-logger/badges/gpa.svg" alt="Code Climate"></a>
+<a href="https://codeclimate.com/github/yoctore/yocto-logger/coverage"><img src="https://codeclimate.com/github/yoctore/yocto-logger/badges/coverage.svg" alt="Test Coverage"></a>
+<a href="https://codeclimate.com/github/yoctore/yocto-logger"><img src="https://codeclimate.com/github/yoctore/yocto-logger/badges/issue_count.svg" alt="Issue Count"></a>
+<a href="https://travis-ci.org/yoctore/yocto-logger"><img src="https://travis-ci.org/yoctore/yocto-logger.svg?branch=master" alt="Build Status"></a></p>
+<h2>Overview</h2><p>This module is a part of yocto node modules for NodeJS. </p>
+<p>Please see <a href="https://www.npmjs.com/~yocto">https://www.npmjs.com/~yocto</a> for complete list of available module (completed day after day).</p>
+<p>This module manage your own logger request on your node app.</p>
+<p>This module his based on <a href="https://www.npmjs.com/package/winston">winston</a> package.</p>
+<p><strong>IMPORTANT : This module is not a complete reimplantation of winston</strong> we only use winston for the core process.</p>
+<p><strong>IMPORTANT : This module shared logger by default in next major release group logger will be add</strong></p>
+<h2>Motivation</h2><p>In all of our project we use a logger library like winston. But all the time we need to
+configure again and again the same library. </p>
+<p>That why we decided to create yocto-Logger.</p>
+<p>This tool is designed to be a very very simple and pre-configured and ready to use tool
+based on the universal logging library winston.</p>
+<h2>Configuration : console transport</h2><p>By default a console is configured with these options : 
+(Cf. winston &amp; momentjs documentation for more details)</p>
+<pre class="prettyprint source lang-javascript"><code>{
+  level             : 'debug',
+  handleExceptions  : false,
+  json              : false,
+  showLevel         : true,
+  silent            : false,
+  timestamp         : function () {
+    // return special timestamp format
+    return moment().format('YYYY/MM/DD HH:mm:ss');
+  }
+};</code></pre><h2>Configuration : daily rotate transport</h2><p>By default a daily rotate transport is configured with these options : 
+(Cf. winston &amp; momentjs documentation for more details)</p>
+<pre class="prettyprint source lang-javascript"><code>{
+  name              : 'default-daily-rotate-transport',
+  level             : 'verbose',
+  dirname           : './',
+  filename          : uuid.v4(), // default name if name is not given
+  handleExceptions  : true,
+  json              : false,
+  maxsize           : 5242880,
+  maxFiles          : 5,
+  colorize          : true,
+  datePattern       : '-yyyy-MM-dd.log',
+  timestamp         : function () {
+    // return special timestamp format
+    return moment().format('YYYY/MM/DD HH:mm:ss');
+  }
+};</code></pre><h2>Logging Method</h2><p> Avaiblable methods are : </p>
+<ul>
+<li>error (for error message)</li>
+<li>warning (for warning message)</li>
+<li>info (for information message)</li>
+<li>debug (for debug message)</li>
+<li>verbose (for normal message)</li>
+</ul>
+<pre class="prettyprint source lang-javascript"><code>var logger = require('yocto-logger');
+// error message
+logger.error('Hello world');
+// warning message
+logger.warning('Hello world');
+// info message
+logger.info('Hello world');
+// debug message
+logger.debug('Hello world');
+// verbose message
+logger.verbose('Hello world');
+// banner message
+logger.banner('Hello world');</code></pre><h2>Banner Method</h2><p>To display on console.log a more significant message we implemened a banner method.
+You can customize style (color and background color) of message but is not save on available transports.</p>
+<pre class="prettyprint source lang-javascript"><code>var logger = require('yocto-logger');
+// banner usage
+logger.banner(&quot;Banner customized&quot;,{ color: &quot;red&quot; , bgColor: &quot;white&quot; });</code></pre><h2>Transport : Adding a new daily rotate transport</h2><pre class="prettyprint source lang-javascript"><code>var logger = require('yocto-logger');
+
+// add new daily rotate transport with default config
+logger.addDailyRotateTransport();
+
+// add new daily rotate transport and process new action when async is finish
+logger.addDailyRotateTransport().then(function(success) {
+    // your process here
+}, function(error) {
+    // error process here
+});
+
+// add new daily transport on specific path + changing filename and more options
+logger.addDailyRotateTransport('/your-new-path-here', 'your-file-name-here', {});</code></pre><h2>Change level manually</h2><p>You can change current logger level manually by method <code>setLogLevel(name)</code>.</p>
+<p>Property <code>name</code> of this function must be one of these values :</p>
+<ul>
+<li>error (for error message)</li>
+<li>warning (for warning message)</li>
+<li>info (for information message)</li>
+<li>debug (for debug message)</li>
+<li>verbose (for normal message)</li>
+</ul>
+<p>For example if we need to set current logger instance to <code>error</code> level : </p>
+<pre class="prettyprint source lang-javascript"><code>var logger = require('yocto-logger');
+
+logger.setLogLevel('error');
+// YOUR Extra code here</code></pre><h2>Utility Methods</h2><p>For a better usage we can interact with all transport by utility methods.
+Methods available are : </p>
+<ul>
+<li>more  :to change the log level to a higher level</li>
+<li>less  : to change the log level to a less level</li>
+<li>enableConsole : to enable console transport if is disable</li>
+<li>disableConsole : to disable console transport if is enable</li>
+<li>enableExceptions : to enable catch exception on logger if is disable</li>
+<li>disableExceptions : to disable catch exception on logger if is enable</li>
+</ul>
+<pre class="prettyprint source lang-javascript"><code>var logger = require('yocto-logger');
+
+// Less & more - initial level is debug
+logger.more(); // level change to verbose
+logger.less(); // level change to debug
+
+// Others method
+logger.enableConsole();
+logger.disableConsole();
+logger.enableExceptions();
+logger.disableExceptions();</code></pre>
+    </article>
+  </section>
+
+
+    
+
+
+  </div>
+
+  <br class="clear">
+
+  <footer>Documentation for application <b>yocto-logger<b>.<br/>Generated at Wed Aug 22 2018 14:48:47 GMT+0400 (+04) with <a href='https://www.npmjs.com/package/yoctodoc'>yocto-doc</a><br/>Copyright Yocto © 2018</footer>
+
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/pagelocation.js"></script>
+
+  
+  
+</body>
+</html>

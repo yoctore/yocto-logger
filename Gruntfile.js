@@ -15,7 +15,9 @@ module.exports = function (grunt) {
         'src/index.js', 'Gruntfile.js'
       ],
       options : {
-        compatibility : true
+        env : {
+          es6 : true
+        }
       }
     },
 
@@ -40,22 +42,33 @@ module.exports = function (grunt) {
         'check-leaks'  : true,
         bail           : false
       },
-      all : [ 'test/*.js' ]
+      all : []
     },
-    yoctodoc : {
-      options : {
-        // Change your path destination
-        destination : './docs'
-      },
 
+    // Generate our doc
+    yoctodoc : {
       // Set all your file here
       all : [ 'src/*.js' ]
+    },
+
+    // Utility tools to auto generate docs on source changes
+    watch : {
+      scripts : {
+        files   : [ 'src/*.js', '*.md' ],
+        tasks   : [ 'doc' ],
+        options : {
+          interrupt     : true,
+          debounceDelay : 250
+        }
+      }
     }
   });
 
   // Load tasks
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-uglify-es');
   grunt.loadNpmTasks('grunt-mocha-cli');
+  grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('yocto-hint');
   grunt.loadNpmTasks('yocto-doc');
 
@@ -64,5 +77,5 @@ module.exports = function (grunt) {
   grunt.registerTask('test', 'mochacli');
   grunt.registerTask('build', [ 'yoctohint', 'uglify' ]);
   grunt.registerTask('doc', [ 'yoctodoc' ]);
-  grunt.registerTask('default', [ 'test', 'build', 'doc' ]);
+  grunt.registerTask('default', [ 'build', 'test', 'doc' ]);
 };

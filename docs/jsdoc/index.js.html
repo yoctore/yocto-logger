@@ -1,4 +1,91 @@
-'use strict';
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>
+      index.js - Documentation
+  </title>
+
+  <link href="https://www.braintreepayments.com/images/favicon-ccda0b14.png" rel="icon" type="image/png">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+  <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+  <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+
+  
+
+  
+  <script type="text/javascript" src="scripts/lodash.min.js"></script>
+  <script type="text/javascript" src="scripts/search.js"></script>
+  <link type="text/css" rel="stylesheet" href="styles/custom.css"/>
+</head>
+
+<body>
+  <svg style="display: none;">
+    <defs>
+      <symbol id="linkIcon" fill="#706d77" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 0h24v24H0z" fill="none"/>
+          <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+  <label for="nav-trigger" class="navicon-button x">
+    <div class="navicon"></div>
+  </label>
+
+  <label for="nav-trigger" class="overlay"></label>
+
+  <div class="top-nav-wrapper">
+    <ul>
+      <li >
+        <a href="index.html">
+          
+            <svg fill="#6D6D6D" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+              <path d="M0 0h24v24H0z" fill="none"/>
+            </svg>
+          
+          
+        </a>
+      </li>
+
+      
+
+    </ul>
+  </div>
+
+  <nav>
+    <h3 class="reference-title">
+      yocto-logger<br/>Version <span style='color:#0095dd'>v3.0.0</span>
+    </h3>
+
+    <h3>Classes</h3><ul><li id="Logger-nav"><a href="Logger.html">Logger</a><ul class='methods'><li data-type="method" id="Logger-create-nav"><a href="Logger.html#.create">create</a></li><li data-type="method" id="Logger-addDailyRotateTransport-nav"><a href="Logger.html#addDailyRotateTransport">addDailyRotateTransport</a></li><li data-type="method" id="Logger-alert-nav"><a href="Logger.html#alert">alert</a></li><li data-type="method" id="Logger-banner-nav"><a href="Logger.html#banner">banner</a></li><li data-type="method" id="Logger-changeLogLevel-nav"><a href="Logger.html#changeLogLevel">changeLogLevel</a></li><li data-type="method" id="Logger-critical-nav"><a href="Logger.html#critical">critical</a></li><li data-type="method" id="Logger-debug-nav"><a href="Logger.html#debug">debug</a></li><li data-type="method" id="Logger-disableConsole-nav"><a href="Logger.html#disableConsole">disableConsole</a></li><li data-type="method" id="Logger-emergency-nav"><a href="Logger.html#emergency">emergency</a></li><li data-type="method" id="Logger-enableConsole-nav"><a href="Logger.html#enableConsole">enableConsole</a></li><li data-type="method" id="Logger-enableErrorToDailyRotateFiles-nav"><a href="Logger.html#enableErrorToDailyRotateFiles">enableErrorToDailyRotateFiles</a></li><li data-type="method" id="Logger-enableRequestToDailyRotateFiles-nav"><a href="Logger.html#enableRequestToDailyRotateFiles">enableRequestToDailyRotateFiles</a></li><li data-type="method" id="Logger-error-nav"><a href="Logger.html#error">error</a></li><li data-type="method" id="Logger-info-nav"><a href="Logger.html#info">info</a></li><li data-type="method" id="Logger-notice-nav"><a href="Logger.html#notice">notice</a></li><li data-type="method" id="Logger-process-nav"><a href="Logger.html#process">process</a></li><li data-type="method" id="Logger-warning-nav"><a href="Logger.html#warning">warning</a></li></ul></li></ul>
+  </nav>
+
+  <div id="main">
+    
+      <h1 class="page-title">
+        index.js
+      </h1>
+    
+
+    
+      
+
+<section>
+  <article>
+    <pre class="prettyprint source linenums"><code>'use strict';
 
 const winston       = require('winston');
 const _             = require('lodash');
@@ -17,14 +104,14 @@ require('winston-daily-rotate-file');
  *
  * This class manage all method to add or use a logger instance on your app.
  *
- * This module is based on <b><a class="blank" href="https://github.com/winstonjs/winston">winston</a></b>
- * for default logging and <b><a class="blank" href="https://github.com/expressjs/morgan">morgan</a></b> for request access logging.
+ * This module is based on &lt;b>&lt;a class="blank" href="https://github.com/winstonjs/winston">winston&lt;/a>&lt;/b>
+ * for default logging and &lt;b>&lt;a class="blank" href="https://github.com/expressjs/morgan">morgan&lt;/a>&lt;/b> for request access logging.
  *
  * This module is not a complete re-implementation of winston or morgan, we only use needed functionnality on this two module to create your own.
  *
- * With this module we can create log on <code class="code">Console</code> and <code class="code">File</code> with a daily rotate management.
+ * With this module we can create log on &lt;code class="code">Console&lt;/code> and &lt;code class="code">File&lt;/code> with a daily rotate management.
  *
- * This module use syslog levels for logging action for more details see <b><a class="blank" href="https://github.com/winstonjs/winston#logging-levels">here</a></b>
+ * This module use syslog levels for logging action for more details see &lt;b>&lt;a class="blank" href="https://github.com/winstonjs/winston#logging-levels">here&lt;/a>&lt;/b>
  *
  * @example
  * // require the module
@@ -41,7 +128,7 @@ class Logger {
   /**
    * Default constructor of Logger class.
    *
-   * Don't use it directly, prefer use <code class="code">logger.create()</code> instead
+   * Don't use it directly, prefer use &lt;code class="code">logger.create()&lt;/code> instead
    *
    * @constructor
    */
@@ -58,15 +145,15 @@ class Logger {
         level       : level,
         fn          : key,
         name        : key.replace(/^crit$/g, 'critical').replace(/^emerg$/g, 'emergency'),
-        useCallback : level >= 0 && level < 3
+        useCallback : level >= 0 &amp;&amp; level &lt; 3
       }
     });
 
     /**
      * Default log level set to use app.
      *
-     * If <code>process.env.NODE_ENV</code> is set to <code>production</code> the <code>notice</code> level was used by default,
-     * otherwise the <code>debug</code> level is used
+     * If &lt;code>process.env.NODE_ENV&lt;/code> is set to &lt;code>production&lt;/code> the &lt;code>notice&lt;/code> level was used by default,
+     * otherwise the &lt;code>debug&lt;/code> level is used
      *
      * @memberof Logger
      * @member {Integer} logLevel default log level for current app
@@ -90,7 +177,7 @@ class Logger {
       const caller = _.size(stack) >= 22 ? stack[22] : null;
 
       // Has specified method ?
-      if (_.isFunction(caller.getMethodName) && _.isFunction(caller.getFileName)) {
+      if (_.isFunction(caller.getMethodName) &amp;&amp; _.isFunction(caller.getFileName)) {
         // Build default from
         info.from = caller.getMethodName() || caller.getFileName();
 
@@ -98,7 +185,7 @@ class Logger {
         info.from = info.from.replace(process.cwd(), '');
 
         // Typeame is a specific class ?
-        if (!path.extname(info.from) && !_.includes(caller.getTypeName(), [ 'Object' ])) {
+        if (!path.extname(info.from) &amp;&amp; !_.includes(caller.getTypeName(), [ 'Object' ])) {
           // Append full path on log
           info.from = [ caller.getTypeName(), info.from ].join('.');
         }
@@ -396,7 +483,7 @@ class Logger {
       // Only in this case
       if (transport.name === 'console') {
         // And if can change level is set
-        if (_.has(transport, 'options.canChangeLevel') && _.get(transport, 'options.canChangeLevel')) {
+        if (_.has(transport, 'options.canChangeLevel') &amp;&amp; _.get(transport, 'options.canChangeLevel')) {
           // Get previous value for log message
           transport.previousLevel = transport.level || transport.parent.level;
 
@@ -434,7 +521,7 @@ class Logger {
     // Level allow callback usage ?
     if (level.useCallback) {
       // Is a callback if defined call this with message and level
-      if (this.callback && _.isFunction(this.callback)) {
+      if (this.callback &amp;&amp; _.isFunction(this.callback)) {
         // Default callback action
         return callback(level, message, meta);
       }
@@ -571,3 +658,23 @@ class Logger {
  * Export current logger to use it on node
  */
 module.exports = Logger;
+</code></pre>
+  </article>
+</section>
+
+    
+
+
+  </div>
+
+  <br class="clear">
+
+  <footer>Documentation for application <b>yocto-logger<b>.<br/>Generated at Tue Aug 28 2018 15:14:29 GMT+0400 (+04) with <a href='https://www.npmjs.com/package/yoctodoc'>yocto-doc</a><br/>Copyright Yocto © 2014 - 2018</footer>
+
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/pagelocation.js"></script>
+
+  
+  
+</body>
+</html>

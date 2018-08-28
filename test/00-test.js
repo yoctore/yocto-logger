@@ -1,76 +1,130 @@
 /**
  * Unit tests
  */
-var logger = require('../src/index.js');
+var logger = require('../dist/index.js');
 var assert = require('chai').assert;
 var should = require('chai').should;
 var util   = require('util');
 var expect = require('chai').expect;
 var _      = require('lodash');
-
-logger.enableConsole(false);
+var moment = require('moment');
+var fs     = require('fs');
 
 // start unit tests
 describe('Logger()', function() {
-  describe('Simple setting different logs level must return true', function() {
+  describe('Create method must be succeed', function() {
+    it('Logger must have method create and must be a function', function() {
+      expect(logger.create).to.be.an('Function');
+    });
+
+    it('create() method must return an instance of Logger', function() {
+      // Ty to create a logger instance
+      logger = logger.create();
+      logger.disableConsole();
+      // Tests
+      expect(logger).to.be.an('Object').not.null;
+    });
+  });
+
+  describe('Required syslog method must be exists and must be a function', function() {
     // define log level
-    var levels = [ 'error', 'warning', 'info', 'verbose', 'debug', 'silly' ];
+    var levels = [ 'emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug' ];
 
     levels.forEach(function(level) {
-      it('Using level' + util.inspect(level, { depth : null }), function() {
-        expect(logger.setLogLevel(level)).to.be.an('Object').not.null;
+      it(`Method ${level} must be exists and be a function`, function() {
+        expect(logger[level]).to.an('Function');
       });
     });
   });
 
-  describe('Loging must be succeed for each defined method', function() {
+  describe('Daily rotate methods must be exists and must be a function', function() {
     // define log level
-    var levels = [ 'debug', 'verbose', 'warning', 'error', 'info', 'silly', 'banner' ];
+    var methods = [ 'enableErrorToDailyRotateFiles', 'enableRequestToDailyRotateFiles', 'addDailyRotateTransport' ];
 
-    levels.forEach(function(level) {
-      it('processing message with level' + util.inspect(level, { depth : null }), function() {
-        expect(logger[level]('test message ' + level)).to.be.an(level === 'banner' ? 'Boolean' : 'Object').not.null;
+    methods.forEach(function(level) {
+      it(`Method ${level} must be exists and be a function`, function() {
+        expect(logger[level]).to.an('Function');
       });
     });
   });
 
-  describe('Chaining less level change will be succeed', function() {
-    // items
-    var items = [ 'error', 'warning', 'info', 'verbose', 'debug' ];
-    // parse all items
-    items.forEach(function (i, k) {
-      it ('Current level must equal to ' + i + ' level', function () {
-        // process less request
-        logger.less();
-        expect(logger.logLevel).to.equal(5 - (k + 1));
+  describe('Utility methods must be exists and must be a function', function() {
+    // define log level
+    var methods = [ 'changeLogLevel', 'banner', 'enableConsole', 'disableConsole' ];
+
+    methods.forEach(function(method) {
+      it(`Method ${method} must be exists and be a function`, function() {
+        expect(logger[method]).to.an('Function');
       });
     });
   });
 
-  describe('Chaining more level change will be succeed', function() {
-    // items
-    var items = [ 'warning', 'info', 'verbose', 'debug', 'silly' ];
-    // parse all items
-    items.forEach(function (i, k) {
-      it ('Current level must equal to ' + i + ' level', function () {
-        // process less request
-        logger.more();
-        expect(logger.logLevel).to.equal(0 + (k + 1));
-      });
-    });
-  });
-  
-  describe('Adding daily rotate transport must succeed.', function() {
-    // items
-    var items = [ [], [ null, 'test.log', { name : 'test' } ] ];
-    // parse all items
-    items.forEach(function (i, k) {
-      it ('Adding daily rotate with given param : ' + util.inspect(i, { depth : null }), function () {
-        // add rotate
-        logger.addDailyRotateTransport.call(logger, i).then(function (success) {
-          expect(success).not.null.to.be.an('EventEmitter');
+
+  // define log level
+  var levels = [ 'emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug' ];
+  levels.forEach(function(level) {
+    describe(`Levels method must log given content for levels ${level}`, function() {
+
+      // Try with multiple type of value
+      var data = [ 'string', 1, false, {}, new Array() ];
+      data.forEach(function (d) {
+        it(`Usage of data type ${typeof d} be succeed and return an object`, function() {
+          expect(logger[level](d)).to.be.an('Object');
         });
       });
+    });
+  });
+
+  describe('Add daily rotate transport must succeed or failed', function() {
+    it ('Combined daily rotate must failed and return false with invalid destination', function () {
+      var destination  = [ process.cwd(), 'test/my-invalid-destination' ].join('/');
+      expect(logger.addDailyRotateTransport({
+        destination : destination
+      })).to.be.an('Boolean').equal(false);
+    });
+
+    it ('Combined daily rotate with an valid destination must succeed and return an object. Audit file and combined file must exists too.', function () {
+      var destination  = [ process.cwd(), 'test/my-valid-destination' ].join('/');
+      var combinedName = [ moment().format('YYYYMMDD'), 'combined.log' ].join('-');
+      expect(logger.addDailyRotateTransport({
+        destination : destination
+      })).to.be.an('Object').and.not.null;
+      expect(fs.existsSync([ destination, combinedName ].join('/'))).to.be.an('Boolean').equal(true);
+      expect(fs.existsSync([ destination, '.audit.json' ].join('/'))).to.be.an('Boolean').equal(true);
+    });
+
+    it ('Error daily rotate must failed and return false with invalid destination', function () {
+      var destination  = [ process.cwd(), 'test/my-invalid-destination' ].join('/');
+      expect(logger.enableErrorToDailyRotateFiles({
+        destination : destination
+      })).to.be.an('Boolean').equal(false);
+    });
+
+    it ('Error daily rotate with a valid destination must succeed and return an object. Audit file and combined file must exists too.', function () {
+      var destination  = [ process.cwd(), 'test/my-valid-destination' ].join('/');
+      var combinedName = [ moment().format('YYYYMMDD'), 'error.log' ].join('-');
+      expect(logger.enableErrorToDailyRotateFiles({
+        destination : destination
+      })).to.be.an('Object').and.not.null;
+      expect(fs.existsSync([ destination, combinedName ].join('/'))).to.be.an('Boolean').equal(true);
+      expect(fs.existsSync([ destination, '.audit.json' ].join('/'))).to.be.an('Boolean').equal(true);
+    });
+
+    it ('Request daily rotate must failed and return false with invalid destination', function () {
+      var destination  = [ process.cwd(), 'test/my-invalid-destination' ].join('/');
+      expect(logger.enableRequestToDailyRotateFiles({
+        destination : destination
+      })).to.be.an('Boolean').equal(false);
+    });
+
+    it ('Request daily rotate with a valid destination must succeed and return a function. Audit file and combined file must exists too.', function () {
+      var destination  = [ process.cwd(), 'test/my-valid-destination' ].join('/');
+      var combinedName = [ moment().format('YYYYMMDD'), 'access.log' ].join('-');
+      expect(logger.enableRequestToDailyRotateFiles({
+        destination : destination
+      })).to.be.an('Function').and.not.null;
+      expect(fs.existsSync([ destination, combinedName ].join('/'))).to.be.an('Boolean').equal(true);
+      expect(fs.existsSync([ destination, '.audit.json' ].join('/'))).to.be.an('Boolean').equal(true);
     });
   });
 });
