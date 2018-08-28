@@ -20,7 +20,7 @@ describe('Logger()', function() {
     it('create() method must return an instance of Logger', function() {
       // Ty to create a logger instance
       logger = logger.create();
-      logger.disableConsole();
+      //logger.disableConsole();
       // Tests
       expect(logger).to.be.an('Object').not.null;
     });
