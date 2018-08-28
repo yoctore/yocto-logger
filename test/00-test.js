@@ -83,13 +83,20 @@ describe('Logger()', function() {
       })).to.be.an('Boolean').equal(false);
     });
 
+    var destination  = [ process.cwd(), 'test/my-valid-destination' ].join('/');
+    var combinedName = [ moment().format('YYYYMMDD'), 'combined.log' ].join('-');
+
     it ('Combined daily rotate with an valid destination must succeed and return an object. Audit file and combined file must exists too.', function () {
-      var destination  = [ process.cwd(), 'test/my-valid-destination' ].join('/');
-      var combinedName = [ moment().format('YYYYMMDD'), 'combined.log' ].join('-');
       expect(logger.addDailyRotateTransport({
         destination : destination
       })).to.be.an('Object').and.not.null;
+    });
+
+    it (`Combined daily rotate must create a file ${combinedName}`, function () {
       expect(fs.existsSync([ destination, combinedName ].join('/'))).to.be.an('Boolean').equal(true);
+    });
+
+    it ('Combined daily rotate must create a audit file', function () {
       expect(fs.existsSync([ destination, '.audit.json' ].join('/'))).to.be.an('Boolean').equal(true);
     });
 
@@ -100,16 +107,23 @@ describe('Logger()', function() {
       })).to.be.an('Boolean').equal(false);
     });
 
+    destination  = [ process.cwd(), 'test/my-valid-destination' ].join('/');
+    combinedName = [ moment().format('YYYYMMDD'), 'error.log' ].join('-');
+
     it ('Error daily rotate with a valid destination must succeed and return an object. Audit file and combined file must exists too.', function () {
-      var destination  = [ process.cwd(), 'test/my-valid-destination' ].join('/');
-      var combinedName = [ moment().format('YYYYMMDD'), 'error.log' ].join('-');
       expect(logger.enableErrorToDailyRotateFiles({
         destination : destination
       })).to.be.an('Object').and.not.null;
-      expect(fs.existsSync([ destination, combinedName ].join('/'))).to.be.an('Boolean').equal(true);
-      expect(fs.existsSync([ destination, '.audit.json' ].join('/'))).to.be.an('Boolean').equal(true);
     });
 
+    it (`Error daily rotate must create a file ${combinedName}`, function () {
+      expect(fs.existsSync([ destination, combinedName ].join('/'))).to.be.an('Boolean').equal(true);
+    });
+
+    it ('Error daily rotate must create a audit file', function () {
+      expect(fs.existsSync([ destination, '.audit.json' ].join('/'))).to.be.an('Boolean').equal(true);
+    });
+    
     it ('Request daily rotate must failed and return false with invalid destination', function () {
       var destination  = [ process.cwd(), 'test/my-invalid-destination' ].join('/');
       expect(logger.enableRequestToDailyRotateFiles({
@@ -117,13 +131,20 @@ describe('Logger()', function() {
       })).to.be.an('Boolean').equal(false);
     });
 
+    destination  = [ process.cwd(), 'test/my-valid-destination' ].join('/');
+    combinedName = [ moment().format('YYYYMMDD'), 'access.log' ].join('-');
+
     it ('Request daily rotate with a valid destination must succeed and return a function. Audit file and combined file must exists too.', function () {
-      var destination  = [ process.cwd(), 'test/my-valid-destination' ].join('/');
-      var combinedName = [ moment().format('YYYYMMDD'), 'access.log' ].join('-');
       expect(logger.enableRequestToDailyRotateFiles({
         destination : destination
       })).to.be.an('Function').and.not.null;
+    });
+
+    it (`Request daily rotate must create a file ${combinedName}`, function () {
       expect(fs.existsSync([ destination, combinedName ].join('/'))).to.be.an('Boolean').equal(true);
+    });
+
+    it ('Request daily rotate must create a audit file', function () {
       expect(fs.existsSync([ destination, '.audit.json' ].join('/'))).to.be.an('Boolean').equal(true);
     });
   });
