@@ -1,7 +1,7 @@
 {
   "name": "yocto-logger",
   "description": "Ready to use logger utility based on winston.",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "scripts": {
     "test": "grunt test"
   },
@@ -68,6 +68,6 @@
     "grunt-mocha-cli": "^4.0.0",
     "jsdoc-template": "^1.2.0",
     "yocto-doc": "^2.3.2",
-    "yocto-hint": "^2.1.0"
+    "yocto-hint": "^2.1.2"
   }
 }

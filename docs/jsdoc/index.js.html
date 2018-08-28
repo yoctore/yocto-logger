@@ -67,7 +67,7 @@
 
   <nav>
     <h3 class="reference-title">
-      yocto-logger<br/>Version <span style='color:#0095dd'>v3.0.0</span>
+      yocto-logger<br/>Version <span style='color:#0095dd'>v4.0.0</span>
     </h3>
 
     <h3>Classes</h3><ul><li id="Logger-nav"><a href="Logger.html">Logger</a><ul class='methods'><li data-type="method" id="Logger-create-nav"><a href="Logger.html#.create">create</a></li><li data-type="method" id="Logger-addDailyRotateTransport-nav"><a href="Logger.html#addDailyRotateTransport">addDailyRotateTransport</a></li><li data-type="method" id="Logger-alert-nav"><a href="Logger.html#alert">alert</a></li><li data-type="method" id="Logger-banner-nav"><a href="Logger.html#banner">banner</a></li><li data-type="method" id="Logger-changeLogLevel-nav"><a href="Logger.html#changeLogLevel">changeLogLevel</a></li><li data-type="method" id="Logger-critical-nav"><a href="Logger.html#critical">critical</a></li><li data-type="method" id="Logger-debug-nav"><a href="Logger.html#debug">debug</a></li><li data-type="method" id="Logger-disableConsole-nav"><a href="Logger.html#disableConsole">disableConsole</a></li><li data-type="method" id="Logger-emergency-nav"><a href="Logger.html#emergency">emergency</a></li><li data-type="method" id="Logger-enableConsole-nav"><a href="Logger.html#enableConsole">enableConsole</a></li><li data-type="method" id="Logger-enableErrorToDailyRotateFiles-nav"><a href="Logger.html#enableErrorToDailyRotateFiles">enableErrorToDailyRotateFiles</a></li><li data-type="method" id="Logger-enableRequestToDailyRotateFiles-nav"><a href="Logger.html#enableRequestToDailyRotateFiles">enableRequestToDailyRotateFiles</a></li><li data-type="method" id="Logger-error-nav"><a href="Logger.html#error">error</a></li><li data-type="method" id="Logger-info-nav"><a href="Logger.html#info">info</a></li><li data-type="method" id="Logger-notice-nav"><a href="Logger.html#notice">notice</a></li><li data-type="method" id="Logger-process-nav"><a href="Logger.html#process">process</a></li><li data-type="method" id="Logger-warning-nav"><a href="Logger.html#warning">warning</a></li></ul></li></ul>
@@ -158,7 +158,8 @@ class Logger {
      * @memberof Logger
      * @member {Integer} logLevel default log level for current app
      */
-    this.logLevel = _.find(this.levels, [ 'name', process.env.NODE_ENV === 'production' ? 'notice' : 'debug' ]);
+    this.logLevel = _.find(this.levels,
+      [ 'name', process.env.NODE_ENV === 'production' ? 'notice' : 'debug' ]);
 
     /**
      * Default transformer use by current logger
@@ -369,7 +370,8 @@ class Logger {
       }
 
       // Default format to use
-      const format = !options.xheaders ? 'combined' : [ morgan['combined'], '- :xheaders' ].join(' ');
+      const format = !options.xheaders ?
+        'combined' : [ morgan['combined'], '- :xheaders' ].join(' ');
 
       // In some case we need to enable extra token on log
       if (options.xheaders) {
@@ -414,8 +416,11 @@ class Logger {
     options = options || {};
     _.set(options, 'changeChangeLevel', options.canChangeLevel || true);
     _.set(options, 'extname', options.extname || 'combined');
-    _.set(options, 'destination', path.resolve((options.destination || '.').replace(/\/+/g, '/').replace(/\/$/, '')));
-    _.set(options, 'filename', [ _.compact([ '%DATE%', options.filename || '', options.extname ]).join('-'), 'log' ].join('.'));
+    _.set(options, 'destination',
+      path.resolve((options.destination || '.').replace(/\/+/g, '/').replace(/\/$/, '')));
+    _.set(options, 'filename', [
+      _.compact([ '%DATE%', options.filename || '', options.extname ]).join('-'), 'log'
+    ].join('.'));
     _.set(options, 'pattern', options.pattern || 'YYYYMMDD');
     _.set(options, 'zipped', options.zipped || true);
     _.set(options, 'size', options.size || '20m');
@@ -459,7 +464,8 @@ class Logger {
       }
 
       // Do a warning message in this case
-      this.warning('Cannot create daily rotate file log handler. Path %s is not a directory.', options.destination);
+      this.warning('Cannot create daily rotate file log handler. Path %s is not a directory.',
+        options.destination);
     } catch (e) {
       // To an error message in this case
       this.error('Cannot add a new daily rotate file : %s', e.message);
@@ -483,7 +489,8 @@ class Logger {
       // Only in this case
       if (transport.name === 'console') {
         // And if can change level is set
-        if (_.has(transport, 'options.canChangeLevel') &amp;&amp; _.get(transport, 'options.canChangeLevel')) {
+        if (_.has(transport, 'options.canChangeLevel') &amp;&amp;
+          _.get(transport, 'options.canChangeLevel')) {
           // Get previous value for log message
           transport.previousLevel = transport.level || transport.parent.level;
 
@@ -491,7 +498,8 @@ class Logger {
           transport.level = !_.isUndefined(search) ? search.name : null;
 
           // Do a notice message
-          this.notice('Level change from %s to %s form transport %s', transport.previousLevel, transport.level, transport.name);
+          this.notice('Level change from %s to %s form transport %s',
+            transport.previousLevel, transport.level, transport.name);
         }
       }
     }.bind(this));
@@ -669,7 +677,7 @@ module.exports = Logger;
 
   <br class="clear">
 
-  <footer>Documentation for application <b>yocto-logger<b>.<br/>Generated at Tue Aug 28 2018 15:40:59 GMT+0400 (+04) with <a href='https://www.npmjs.com/package/yoctodoc'>yocto-doc</a><br/>Copyright Yocto © 2014 - 2018</footer>
+  <footer>Documentation for application <b>yocto-logger<b>.<br/>Generated at Tue Aug 28 2018 17:09:32 GMT+0400 (+04) with <a href='https://www.npmjs.com/package/yoctodoc'>yocto-doc</a><br/>Copyright Yocto © 2014 - 2018</footer>
 
   <script src="scripts/linenumber.js"></script>
   <script src="scripts/pagelocation.js"></script>

@@ -71,7 +71,8 @@ class Logger {
      * @memberof Logger
      * @member {Integer} logLevel default log level for current app
      */
-    this.logLevel = _.find(this.levels, [ 'name', process.env.NODE_ENV === 'production' ? 'notice' : 'debug' ]);
+    this.logLevel = _.find(this.levels,
+      [ 'name', process.env.NODE_ENV === 'production' ? 'notice' : 'debug' ]);
 
     /**
      * Default transformer use by current logger
@@ -282,7 +283,8 @@ class Logger {
       }
 
       // Default format to use
-      const format = !options.xheaders ? 'combined' : [ morgan['combined'], '- :xheaders' ].join(' ');
+      const format = !options.xheaders ?
+        'combined' : [ morgan['combined'], '- :xheaders' ].join(' ');
 
       // In some case we need to enable extra token on log
       if (options.xheaders) {
@@ -327,8 +329,11 @@ class Logger {
     options = options || {};
     _.set(options, 'changeChangeLevel', options.canChangeLevel || true);
     _.set(options, 'extname', options.extname || 'combined');
-    _.set(options, 'destination', path.resolve((options.destination || '.').replace(/\/+/g, '/').replace(/\/$/, '')));
-    _.set(options, 'filename', [ _.compact([ '%DATE%', options.filename || '', options.extname ]).join('-'), 'log' ].join('.'));
+    _.set(options, 'destination',
+      path.resolve((options.destination || '.').replace(/\/+/g, '/').replace(/\/$/, '')));
+    _.set(options, 'filename', [
+      _.compact([ '%DATE%', options.filename || '', options.extname ]).join('-'), 'log'
+    ].join('.'));
     _.set(options, 'pattern', options.pattern || 'YYYYMMDD');
     _.set(options, 'zipped', options.zipped || true);
     _.set(options, 'size', options.size || '20m');
@@ -372,7 +377,8 @@ class Logger {
       }
 
       // Do a warning message in this case
-      this.warning('Cannot create daily rotate file log handler. Path %s is not a directory.', options.destination);
+      this.warning('Cannot create daily rotate file log handler. Path %s is not a directory.',
+        options.destination);
     } catch (e) {
       // To an error message in this case
       this.error('Cannot add a new daily rotate file : %s', e.message);
@@ -396,7 +402,8 @@ class Logger {
       // Only in this case
       if (transport.name === 'console') {
         // And if can change level is set
-        if (_.has(transport, 'options.canChangeLevel') && _.get(transport, 'options.canChangeLevel')) {
+        if (_.has(transport, 'options.canChangeLevel') &&
+          _.get(transport, 'options.canChangeLevel')) {
           // Get previous value for log message
           transport.previousLevel = transport.level || transport.parent.level;
 
@@ -404,7 +411,8 @@ class Logger {
           transport.level = !_.isUndefined(search) ? search.name : null;
 
           // Do a notice message
-          this.notice('Level change from %s to %s form transport %s', transport.previousLevel, transport.level, transport.name);
+          this.notice('Level change from %s to %s form transport %s',
+            transport.previousLevel, transport.level, transport.name);
         }
       }
     }.bind(this));

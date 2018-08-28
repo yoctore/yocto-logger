@@ -6,6 +6,9 @@ module.exports = function (grunt) {
     // Default package
     pkg : grunt.file.readJSON('package.json'),
 
+    // Current generation date
+    date : new Date(),
+
     // Hint our app
     yoctohint : {
       json : [
@@ -24,7 +27,11 @@ module.exports = function (grunt) {
     // Uglify our app
     uglify : {
       options : {
-        banner : '/* <%= pkg.name %> - <%= pkg.description %> - V<%= pkg.version %> */\n'
+        banner : [
+          '/* <%= pkg.name %>',
+          '<%= pkg.description %>',
+          'V<%= pkg.version %>',
+          '<%= date %>*/\n' ].join(' - ')
       },
       api : {
         src  : 'src/index.js',
