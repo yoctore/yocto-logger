@@ -20,6 +20,7 @@ logger.warning('WARNING TEST');
 logger.notice('NOTICE TEST');
 logger.info('INFO TEST');
 logger.debug('DEBUG TEST');
+logger.deprecated('OLD Method', 'new MEthod', 'my extra message to use');
 
 var express = require('express')
 var app = express();

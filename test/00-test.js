@@ -12,6 +12,12 @@ var fs     = require('fs');
 
 // start unit tests
 describe('Logger()', function() {
+  // define log level
+  var levels = [
+    'emergency', 'alert', 'critical', 'error', 
+    'warning', 'notice', 'info', 'debug', 'deprecated'
+  ];
+
   describe('Create method must be succeed', function() {
     it('Logger must have method create and must be a function', function() {
       expect(logger.create).to.be.an('Function');
@@ -27,9 +33,6 @@ describe('Logger()', function() {
   });
 
   describe('Required syslog method must be exists and must be a function', function() {
-    // define log level
-    var levels = [ 'emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug' ];
-
     levels.forEach(function(level) {
       it(`Method ${level} must be exists and be a function`, function() {
         expect(logger[level]).to.an('Function');
@@ -39,7 +42,10 @@ describe('Logger()', function() {
 
   describe('Daily rotate methods must be exists and must be a function', function() {
     // define log level
-    var methods = [ 'enableErrorToDailyRotateFiles', 'enableRequestToDailyRotateFiles', 'addDailyRotateTransport' ];
+    var methods = [ 
+      'enableErrorToDailyRotateFiles', 'enableRequestToDailyRotateFiles', 
+      'addDailyRotateTransport'
+    ];
 
     methods.forEach(function(level) {
       it(`Method ${level} must be exists and be a function`, function() {
@@ -59,8 +65,6 @@ describe('Logger()', function() {
     });
   });
 
-  // define log level
-  var levels = [ 'emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug' ];
   
   levels.forEach(function(level) {
     describe(`Levels method must log given content for levels ${level}`, function() {

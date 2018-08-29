@@ -243,10 +243,7 @@ class Logger {
    * @param {Object} options options to use for new transporter
    * @return {Boolean|Mixed} false in case of error otherwise winston.add return value
    */
-  enableErrorToDailyRotateFiles (options) {
-    // Try to normalize options
-    options = options || {};
-
+  enableErrorToDailyRotateFiles (options = {}) {
     // Add default options
     options.extname = 'error';
     options.level = 'warning';
@@ -262,10 +259,7 @@ class Logger {
    * @param {Object} options options to use on daily logger
    * @return {Boolean|Mixed} morgan instance in case of success or false in case of error
    */
-  enableRequestToDailyRotateFiles (options) {
-    // Try to normalize options
-    options = options || {};
-
+  enableRequestToDailyRotateFiles (options = {}) {
     // Add default options
     options.extname = 'access';
     options.level = 'info';
@@ -324,9 +318,8 @@ class Logger {
    * @param {Object} isWeb true if is for a web request logger (morgan) false otherwie
    * @return {Boolean|Mixed} false in case of error otherwise winston.add return value
    */
-  addDailyRotateTransport (options, isWeb) {
+  addDailyRotateTransport (options = {}, isWeb = false) {
     // Try to normalize options
-    options = options || {};
     _.set(options, 'changeChangeLevel', options.canChangeLevel || true);
     _.set(options, 'extname', options.extname || 'combined');
     _.set(options, 'destination',
@@ -572,6 +565,21 @@ class Logger {
 
     // Default statement
     return this.process('info', message || '', meta);
+  }
+
+  /**
+   * Utility message to provide deprectated log format
+   *
+   * @param {String} sourceMethod default deprectated source method
+   * @param {String} newMethod new method name to use
+   * @param {String} extraMessage an extra message to add to current log
+   * @return {DerivedLogger} instance of derived logger
+   */
+  deprecated (sourceMethod, newMethod, extraMessage = '') {
+    // Default statement
+    return this.process('notice', [
+      chalk.yellow('[DEPRECATED]'), `Method %s is depreacted. Prefere use %s. ${extraMessage}`
+    ].join(' '), [ sourceMethod, newMethod ]);
   }
 }
 

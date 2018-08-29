@@ -70,7 +70,7 @@
       yocto-logger<br/>Version <span style='color:#0095dd'>v4.0.0</span>
     </h3>
 
-    <h3>Classes</h3><ul><li id="Logger-nav"><a href="Logger.html">Logger</a><ul class='methods'><li data-type="method" id="Logger-create-nav"><a href="Logger.html#.create">create</a></li><li data-type="method" id="Logger-addDailyRotateTransport-nav"><a href="Logger.html#addDailyRotateTransport">addDailyRotateTransport</a></li><li data-type="method" id="Logger-alert-nav"><a href="Logger.html#alert">alert</a></li><li data-type="method" id="Logger-banner-nav"><a href="Logger.html#banner">banner</a></li><li data-type="method" id="Logger-changeLogLevel-nav"><a href="Logger.html#changeLogLevel">changeLogLevel</a></li><li data-type="method" id="Logger-critical-nav"><a href="Logger.html#critical">critical</a></li><li data-type="method" id="Logger-debug-nav"><a href="Logger.html#debug">debug</a></li><li data-type="method" id="Logger-disableConsole-nav"><a href="Logger.html#disableConsole">disableConsole</a></li><li data-type="method" id="Logger-emergency-nav"><a href="Logger.html#emergency">emergency</a></li><li data-type="method" id="Logger-enableConsole-nav"><a href="Logger.html#enableConsole">enableConsole</a></li><li data-type="method" id="Logger-enableErrorToDailyRotateFiles-nav"><a href="Logger.html#enableErrorToDailyRotateFiles">enableErrorToDailyRotateFiles</a></li><li data-type="method" id="Logger-enableRequestToDailyRotateFiles-nav"><a href="Logger.html#enableRequestToDailyRotateFiles">enableRequestToDailyRotateFiles</a></li><li data-type="method" id="Logger-error-nav"><a href="Logger.html#error">error</a></li><li data-type="method" id="Logger-info-nav"><a href="Logger.html#info">info</a></li><li data-type="method" id="Logger-notice-nav"><a href="Logger.html#notice">notice</a></li><li data-type="method" id="Logger-process-nav"><a href="Logger.html#process">process</a></li><li data-type="method" id="Logger-warning-nav"><a href="Logger.html#warning">warning</a></li></ul></li></ul>
+    <h3>Classes</h3><ul><li id="Logger-nav"><a href="Logger.html">Logger</a><ul class='methods'><li data-type="method" id="Logger-create-nav"><a href="Logger.html#.create">create</a></li><li data-type="method" id="Logger-addDailyRotateTransport-nav"><a href="Logger.html#addDailyRotateTransport">addDailyRotateTransport</a></li><li data-type="method" id="Logger-alert-nav"><a href="Logger.html#alert">alert</a></li><li data-type="method" id="Logger-banner-nav"><a href="Logger.html#banner">banner</a></li><li data-type="method" id="Logger-changeLogLevel-nav"><a href="Logger.html#changeLogLevel">changeLogLevel</a></li><li data-type="method" id="Logger-critical-nav"><a href="Logger.html#critical">critical</a></li><li data-type="method" id="Logger-debug-nav"><a href="Logger.html#debug">debug</a></li><li data-type="method" id="Logger-deprecated-nav"><a href="Logger.html#deprecated">deprecated</a></li><li data-type="method" id="Logger-disableConsole-nav"><a href="Logger.html#disableConsole">disableConsole</a></li><li data-type="method" id="Logger-emergency-nav"><a href="Logger.html#emergency">emergency</a></li><li data-type="method" id="Logger-enableConsole-nav"><a href="Logger.html#enableConsole">enableConsole</a></li><li data-type="method" id="Logger-enableErrorToDailyRotateFiles-nav"><a href="Logger.html#enableErrorToDailyRotateFiles">enableErrorToDailyRotateFiles</a></li><li data-type="method" id="Logger-enableRequestToDailyRotateFiles-nav"><a href="Logger.html#enableRequestToDailyRotateFiles">enableRequestToDailyRotateFiles</a></li><li data-type="method" id="Logger-error-nav"><a href="Logger.html#error">error</a></li><li data-type="method" id="Logger-info-nav"><a href="Logger.html#info">info</a></li><li data-type="method" id="Logger-notice-nav"><a href="Logger.html#notice">notice</a></li><li data-type="method" id="Logger-process-nav"><a href="Logger.html#process">process</a></li><li data-type="method" id="Logger-warning-nav"><a href="Logger.html#warning">warning</a></li></ul></li></ul>
   </nav>
 
   <div id="main">
@@ -330,10 +330,7 @@ class Logger {
    * @param {Object} options options to use for new transporter
    * @return {Boolean|Mixed} false in case of error otherwise winston.add return value
    */
-  enableErrorToDailyRotateFiles (options) {
-    // Try to normalize options
-    options = options || {};
-
+  enableErrorToDailyRotateFiles (options = {}) {
     // Add default options
     options.extname = 'error';
     options.level = 'warning';
@@ -349,10 +346,7 @@ class Logger {
    * @param {Object} options options to use on daily logger
    * @return {Boolean|Mixed} morgan instance in case of success or false in case of error
    */
-  enableRequestToDailyRotateFiles (options) {
-    // Try to normalize options
-    options = options || {};
-
+  enableRequestToDailyRotateFiles (options = {}) {
     // Add default options
     options.extname = 'access';
     options.level = 'info';
@@ -411,9 +405,8 @@ class Logger {
    * @param {Object} isWeb true if is for a web request logger (morgan) false otherwie
    * @return {Boolean|Mixed} false in case of error otherwise winston.add return value
    */
-  addDailyRotateTransport (options, isWeb) {
+  addDailyRotateTransport (options = {}, isWeb = false) {
     // Try to normalize options
-    options = options || {};
     _.set(options, 'changeChangeLevel', options.canChangeLevel || true);
     _.set(options, 'extname', options.extname || 'combined');
     _.set(options, 'destination',
@@ -660,6 +653,21 @@ class Logger {
     // Default statement
     return this.process('info', message || '', meta);
   }
+
+  /**
+   * Utility message to provide deprectated log format
+   *
+   * @param {String} sourceMethod default deprectated source method
+   * @param {String} newMethod new method name to use
+   * @param {String} extraMessage an extra message to add to current log
+   * @return {DerivedLogger} instance of derived logger
+   */
+  deprecated (sourceMethod, newMethod, extraMessage = '') {
+    // Default statement
+    return this.process('notice', [
+      chalk.yellow('[DEPRECATED]'), `Method %s is depreacted. Prefere use %s. ${extraMessage}`
+    ].join(' '), [ sourceMethod, newMethod ]);
+  }
 }
 
 /**
@@ -677,7 +685,7 @@ module.exports = Logger;
 
   <br class="clear">
 
-  <footer>Documentation for application <b>yocto-logger<b>.<br/>Generated at Tue Aug 28 2018 17:09:32 GMT+0400 (+04) with <a href='https://www.npmjs.com/package/yoctodoc'>yocto-doc</a><br/>Copyright Yocto © 2014 - 2018</footer>
+  <footer>Documentation for application <b>yocto-logger<b>.<br/>Generated at Wed Aug 29 2018 14:20:40 GMT+0400 (+04) with <a href='https://www.npmjs.com/package/yoctodoc'>yocto-doc</a><br/>Copyright Yocto © 2014 - 2018</footer>
 
   <script src="scripts/linenumber.js"></script>
   <script src="scripts/pagelocation.js"></script>
