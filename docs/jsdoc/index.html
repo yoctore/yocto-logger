@@ -156,7 +156,7 @@ var options = {
 };
 
 // add your web daily rorate file
-logger.enableRequestToDailyRotateFiles(options);</code></pre><h3>Logging Methods</h3><p> Avaiblable methods are : </p>
+logger.enableRequestToDailyRotateFiles(options);</code></pre><h3>Logging Methods</h3><p>Default methods are : </p>
 <ul>
 <li>emergency</li>
 <li>alert</li>
@@ -166,6 +166,10 @@ logger.enableRequestToDailyRotateFiles(options);</code></pre><h3>Logging Methods
 <li>notice</li>
 <li>info</li>
 <li>debug</li>
+</ul>
+<p>Utility method are : </p>
+<ul>
+<li>deprecated</li>
 </ul>
 <pre class="prettyprint source lang-javascript"><code>var logger = require('yocto-logger');
 // Create your own logger here
@@ -177,7 +181,8 @@ logger.error('Hello world');
 logger.warning('Hello world');
 logger.notice('Hello world');
 logger.info('Hello world');
-logger.debug('Hello world');</code></pre><h3>Banner Method</h3><p>To display on console.log a more significant message we implemened a utility banner method.</p>
+logger.debug('Hello world');
+logger.deprecated('Old Method', 'NEw Method', 'extra message');</code></pre><h3>Banner Method</h3><p>To display on console.log a more significant message we implemened a utility banner method.</p>
 <pre class="prettyprint source lang-javascript"><code>var logger = require('yocto-logger');
 // Create your own logger here
 logger = logger.create(); // Use it
@@ -223,7 +228,7 @@ logger = logger.create(); // Use it</code></pre><ul>
 
   <br class="clear">
 
-  <footer>Documentation for application <b>yocto-logger<b>.<br/>Generated at Wed Aug 29 2018 14:20:40 GMT+0400 (+04) with <a href='https://www.npmjs.com/package/yoctodoc'>yocto-doc</a><br/>Copyright Yocto © 2014 - 2018</footer>
+  <footer>Documentation for application <b>yocto-logger<b>.<br/>Generated at Wed Aug 29 2018 14:22:36 GMT+0400 (+04) with <a href='https://www.npmjs.com/package/yoctodoc'>yocto-doc</a><br/>Copyright Yocto © 2014 - 2018</footer>
 
   <script src="scripts/linenumber.js"></script>
   <script src="scripts/pagelocation.js"></script>

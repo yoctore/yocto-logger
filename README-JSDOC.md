@@ -118,7 +118,7 @@ logger.enableRequestToDailyRotateFiles(options);
 
 ### Logging Methods
 
- Avaiblable methods are : 
+Default methods are : 
  
  - emergency
  - alert
@@ -128,6 +128,10 @@ logger.enableRequestToDailyRotateFiles(options);
  - notice
  - info
  - debug
+
+Utility method are : 
+
+- deprecated
 
 ```javascript
 var logger = require('yocto-logger');
@@ -141,6 +145,7 @@ logger.warning('Hello world');
 logger.notice('Hello world');
 logger.info('Hello world');
 logger.debug('Hello world');
+logger.deprecated('Old Method', 'NEw Method', 'extra message');
 ```
 
 ### Banner Method 
