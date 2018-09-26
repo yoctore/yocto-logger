@@ -51,23 +51,23 @@
   "dependencies": {
     "callsites": "^2.0.0",
     "chalk": "^2.4.1",
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.11",
     "moment": "^2.22.2",
-    "morgan": "^1.9.0",
+    "morgan": "^1.9.1",
     "stack-trace": "0.0.10",
-    "winston": "^3.0.0",
+    "winston": "^3.1.0",
     "winston-daily-rotate-file": "^3.3.2",
     "yocto-utils": "^2.1.7"
   },
   "devDependencies": {
     "chai": "^4.1.2",
     "grunt": "^1.0.3",
-    "grunt-contrib-uglify": "^3.4.0",
+    "grunt-contrib-uglify": "^4.0.0",
     "grunt-contrib-uglify-es": "^3.3.0",
     "grunt-contrib-watch": "^1.1.0",
     "grunt-mocha-cli": "^4.0.0",
     "jsdoc-template": "^1.2.0",
-    "yocto-doc": "^2.3.2",
+    "yocto-doc": "^2.3.7",
     "yocto-hint": "^2.1.3"
   }
 }

@@ -14,6 +14,11 @@ $(document).ready(function () {
     )
   });
 
+  // move example container to correct place
+  $('.example-container').each(function() {
+    $(this).prev('.details').prev('.description').append($(this));
+  });
+
 
   // force remove of search container on dom is already exists
   $('.search-container').remove();

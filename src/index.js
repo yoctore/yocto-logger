@@ -122,8 +122,12 @@ class Logger {
      * @member {FormatWrap} defaultTimestampFormat internal default transformer for timestamp
      */
     this.defaultTimestampFormat = winston.format(info =>{
+      // Set locale with default system locale
+      moment.locale(process.env.LC_ALL || process.env.LC_MESSAGES ||
+                    process.env.LANG || process.env.LANGUAGE);
+
       // Set default timestamp format
-      info.timestamp = moment(info.timestamp).format('YYYY/MM/DD HH:mm:ss');
+      info.timestamp = moment(info.timestamp).format('L LTS');
 
       // Default statement
       return info;
@@ -193,6 +197,11 @@ class Logger {
    * Default method to create a logger instance.
    *
    * Use this method to get default logger instance
+   *
+   * @example
+   * var logger = require('yocto-logger');
+   * // Create your own logger here
+   * logger = logger.create();
    *
    * @return {Logger} an instance of current logger
    */
@@ -313,6 +322,27 @@ class Logger {
 
   /**
    * Add a new daily transport file to logger module
+   *
+   * @example
+   * var logger = require('yocto-logger');
+   *  // Create your own logger here
+   * logger = logger.create(); // Use it
+   *
+   * // default options
+   * var options = {
+   *  changeChangeLevel : true, // indicates that dynamic level change is allowed
+   *  extname : 'combined', // indicated the extention name of file by default <pattern>-<extname>.log
+   *  destination : '.', // default destination of log file
+   *  filename : '<pattern>-<extname>.log', // default file name with define structure <pattern>-<extname>.log
+   *  pattern : YYYYMMDD, // default pattern of date for filename
+   *  zipped : true, // define if log must be zipped
+   *  size : '20m', // default size of file
+   *  delay : '14d', // default delay of storage
+   *  level :  'debug' // default log level
+   * };
+   *
+   * // add your daily rorate file
+   * logger.addDailyRotateTransport(options);
    *
    * @param {Object} options override options value on daily rotate
    * @param {Object} isWeb true if is for a web request logger (morgan) false otherwie
@@ -554,13 +584,39 @@ class Logger {
    * @return {DerivedLogger} instance of derived logger
    */
   banner (message, ... meta) {
+    // Default step value
+    const step = 20;
+
+    // Define separtor element
+    const separator = {
+      horizontal : '-',
+      begin      : '|',
+      end        : '|'
+    };
+
     // Only if message is define
+
     if (message) {
       // Format banner message before send to notice method
-      message = [ _.repeat(' ', 10), message.toUpperCase(), _.repeat(' ', 10) ].join('');
+      const line = [ _.repeat(separator.horizontal, _.size(message) + step * 2) ].join('');
 
-      // Default call
-      return this.process('info', chalk.bgWhite.black(message), meta);
+      // Print first line
+
+      if (this.process('info', line, meta)) {
+        // Format message
+        message = [ separator.begin,
+          _.repeat(' ', (step * 2 - 2) / 2),
+          _.toUpper(message),
+          _.repeat(' ', (step * 2 - 2) / 2),
+          separator.end
+        ].join('');
+
+        // Default message print
+        if (this.process('info', message, meta)) {
+          // Print last line
+          return this.process('info', line, meta);
+        }
+      }
     }
 
     // Default statement
